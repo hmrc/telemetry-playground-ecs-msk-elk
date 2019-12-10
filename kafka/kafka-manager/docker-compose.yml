@@ -1,0 +1,8 @@
+version: '3'
+services:
+  kafkamanager:
+    image: kafkamanager/kafka-manager:2.0.0.2
+    ports:
+      - 9000:9000
+    environment:
+      - "ZK_HOSTS=${MSK_ZK}"
