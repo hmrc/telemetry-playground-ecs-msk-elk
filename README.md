@@ -38,7 +38,7 @@ Do the following to create the stack:
 * `make ecs-svc-up # Bring the ECS services up (includes service discovery)`
 * `make ecs-svc-down # Bring the ECS services down`
 
-TODO: Automat creating the index pattern in logstash.
+TODO: Automate SG rule to allow ECS to access MSK
 
 # SSH tunnel to ECS EC2 host
 To set up the port mappings from your localhost to the ECS cluster, Zookeeper and Kafka broker run:
