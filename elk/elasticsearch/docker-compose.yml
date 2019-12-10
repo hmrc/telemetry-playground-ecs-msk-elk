@@ -1,0 +1,36 @@
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.0
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.type=single-node"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    command: 
+      - bash 
+      - -c 
+      - |
+        /usr/local/bin/docker-entrypoint.sh eswrapper &
+        echo "Waiting for Elasticsearch to start listening ⏳"
+        while [ $$(curl -s -o /dev/null -w %{http_code} http://localhost:9200/) -eq 000 ] ; do 
+          sleep 5 
+        done
+        echo "Updating index_patterns to default to 1 shard and 0 replica"
+        echo $$(curl http://localhost:9200/_template/all -X PUT -s -d '{"index_patterns":"*","settings":{"number_of_shards":1,"number_of_replicas":0}}' -H "Content-Type: application/json")
+        echo "Creating ILM logstash policy"
+        echo $$(curl http://localhost:9200/_ilm/policy/logstash_policy -X PUT -s -d '{"policy":{"phases":{"hot":{"actions":{"rollover":{"max_size":"10GB","max_age":"1d"}}},"delete":{"min_age":"2d","actions":{"delete":{}}}}}}' -H "Content-Type: application/json")
+        echo "Creating ILM logstash template"
+        echo $$(curl http://localhost:9200/_template/logstash_template -X PUT -s -d '{"index_patterns":["logstash-*"],"settings":{"number_of_shards":1,"number_of_replicas":0,"index.lifecycle.name":"logstash_policy","index.lifecycle.rollover_alias":"logstash"}}' -H "Content-Type: application/json")
+        echo "Seeding logstash index with: logstash-000000"
+        echo $$(curl http://localhost:9200/logstash-000000 -X PUT -s -d '{"aliases":{"logstash":{"is_write_index":true}}}' -H "Content-Type: application/json")
+        sleep infinity

@@ -1,0 +1,12 @@
+version: 1
+task_definition:
+  ecs_network_mode: awsvpc
+run_params:
+  network_configuration:
+    awsvpc_configuration:
+      subnets:
+        - ${ECS_SUBNET_1}
+        - ${ECS_SUBNET_2}
+        - ${ECS_SUBNET_3}
+      security_groups:
+        - ${ECS_SEC_GROUP}

@@ -1,0 +1,18 @@
+version: 1
+task_definition:
+  ecs_network_mode: awsvpc
+  services:
+    kibana:
+      essential: true
+      init_process_enabled: true
+      cpu_shares: 1024
+      mem_reservation: 512M
+run_params:
+  network_configuration:
+    awsvpc_configuration:
+      subnets:
+        - ${ECS_SUBNET_1}
+        - ${ECS_SUBNET_2}
+        - ${ECS_SUBNET_3}
+      security_groups:
+        - ${ECS_SEC_GROUP}

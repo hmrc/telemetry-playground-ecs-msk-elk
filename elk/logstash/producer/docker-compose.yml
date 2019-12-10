@@ -1,0 +1,8 @@
+version: '3'
+services:
+  logstash-producer:
+    image:  '$IMAGE_TAG'
+    environment:
+      - "LOG_LEVEL=error"
+      - "KAFKA_BOOTSTRAP_BROKERS=${MSK_BOOTSTRAP_BROKERS}"
+      - "KAFKA_TOPIC=${KAFKA_TOPIC}"
