@@ -31,36 +31,28 @@ endif
 export TEL_COMMON := $(shell aws s3 ls s3://$(S3_BUCKET)/telemetry-common/terraform.tfstate 2>/dev/null)
 ifeq ($(TEL_COMMON),)
   $(info MSK_STATE and ECS_STATE will be set from per component terraform state)
-  export MSK_TFSTATE := $(if $(MSK_TFSTATE),$(MSK_TFSTATE),$(shell aws s3 cp s3://$(S3_BUCKET)/msk-cluster/terraform.tfstate - 2>/dev/null))
-  export ECS_TFSTATE := $(if $(ECS_TFSTATE),$(ECS_TFSTATE),$(shell aws s3 cp s3://$(S3_BUCKET)/ecs/terraform.tfstate - 2>/dev/null))
+  $(shell aws s3 cp s3://$(S3_BUCKET)/msk-cluster/terraform.tfstate > msk-tfstate.tmp)
+  $(shell aws s3 cp s3://$(S3_BUCKET)/ecs/terraform.tfstate - > ecs-tfstate.tmp)
 else
   $(info MSK_STATE and ECS_STATE will be set from meta-component terraform state)
-  export MSK_TFSTATE := $(if $(MSK_TFSTATE),$(MSK_TFSTATE),$(shell aws s3 cp s3://$(S3_BUCKET)/telemetry-common/terraform.tfstate - 2>/dev/null))
-  export ECS_TFSTATE := $(if $(ECS_TFSTATE),$(ECS_TFSTATE),$(shell aws s3 cp s3://$(S3_BUCKET)/telemetry-common/terraform.tfstate - 2>/dev/null))
+  $(shell aws s3 cp s3://$(S3_BUCKET)/telemetry-common/terraform.tfstate - > msk-tfstate.tmp)
+  $(shell aws s3 cp s3://$(S3_BUCKET)/telemetry-common/terraform.tfstate - > ecs-tfstate.tmp)
 endif
 
-ifeq ($(MSK_TFSTATE),)
-  $(error MSK_TFSTATE not set)
-endif
+export MSK_BOOTSTRAP_BROKERS := $(if $(MSK_BOOTSTRAP_BROKERS),$(MSK_BOOTSTRAP_BROKERS),$(shell jq -r '.resources[]|select(.type=="aws_msk_cluster")|.instances[].attributes.bootstrap_brokers' < <(cat msk-tfstate.tmp)))
+export MSK_CLUSTER_NAME := $(if $(MSK_CLUSTER_NAME),$(MSK_CLUSTER_NAME),$(shell jq -r '.resources[]|select(.type=="aws_msk_cluster")|.instances[].attributes.cluster_name' < <(cat msk-tfstate.tmp)))
+export MSK_CLUSTER_ARN := $(if $(MSK_CLUSTER_ARN),$(MSK_CLUSTER_ARN),$(shell jq -r '.resources[]|select(.type=="aws_msk_cluster")|.instances[].attributes.arn' < <(cat msk-tfstate.tmp)))
+export MSK_ZK := $(if $(MSK_ZK),$(MSK_ZK),$(shell jq -r '.resources[]|select(.type=="aws_msk_cluster")|.instances[].attributes.zookeeper_connect_string' < <(cat msk-tfstate.tmp)))
+export MSK_SG := $(if $(MSK_SG),$(MSK_SG),$(shell jq -r '.resources[]|select(.type=="aws_security_group")|.instances[]|.attributes.id' < <(cat msk-tfstate.tmp)))
 
-ifeq ($(ECS_TFSTATE),)
-  $(error ECS_TFSTATE not set)
-endif
-
-export MSK_BOOTSTRAP_BROKERS := $(if $(MSK_BOOTSTRAP_BROKERS),$(MSK_BOOTSTRAP_BROKERS),$(shell jq -r '.resources[]|select(.type=="aws_msk_cluster")|.instances[].attributes.bootstrap_brokers' < <(echo '$(MSK_TFSTATE)')))
-export MSK_CLUSTER_NAME := $(if $(MSK_CLUSTER_NAME),$(MSK_CLUSTER_NAME),$(shell jq -r '.resources[]|select(.type=="aws_msk_cluster")|.instances[].attributes.cluster_name' < <(echo '$(MSK_TFSTATE)')))
-export MSK_CLUSTER_ARN := $(if $(MSK_CLUSTER_ARN),$(MSK_CLUSTER_ARN),$(shell jq -r '.resources[]|select(.type=="aws_msk_cluster")|.instances[].attributes.arn' < <(echo '$(MSK_TFSTATE)')))
-export MSK_ZK := $(if $(MSK_ZK),$(MSK_ZK),$(shell jq -r '.resources[]|select(.type=="aws_msk_cluster")|.instances[].attributes.zookeeper_connect_string' < <(echo '$(MSK_TFSTATE)')))
-export MSK_SG := $(if $(MSK_SG),$(MSK_SG),$(shell jq -r '.resources[]|select(.type=="aws_security_group")|.instances[]|.attributes.id' < <(echo '$(MSK_TFSTATE)')))
-
-export ECS_CLUSTER_NAME := $(if $(ECS_CLUSTER_NAME),$(ECS_CLUSTER_NAME),$(shell jq -r '.resources[]|select(.type=="aws_ecs_cluster")|.instances[].attributes.name' < <(echo '$(ECS_TFSTATE)')))
-export ECS_SEC_GROUP := $(if $(ECS_SEC_GROUP),$(ECS_SEC_GROUP),$(shell jq -r '.resources[]|select(.name=="ecs_node_sg")|.instances[].attributes.id' < <(echo '$(ECS_TFSTATE)')))
-export ECS_SUBNET_1 := $(if $(ECS_SUBNET_1),$(ECS_SUBNET_1),$(shell jq -r '.resources[]|select(.name=="ecs_nlb")|.instances[].attributes.subnets[0]' < <(echo '$(ECS_TFSTATE)')))
-export ECS_SUBNET_2 := $(if $(ECS_SUBNET_2),$(ECS_SUBNET_2),$(shell jq -r '.resources[]|select(.name=="ecs_nlb")|.instances[].attributes.subnets[1]' < <(echo '$(ECS_TFSTATE)')))
-export ECS_SUBNET_3 := $(if $(ECS_SUBNET_3),$(ECS_SUBNET_3),$(shell jq -r '.resources[]|select(.name=="ecs_nlb")|.instances[].attributes.subnets[2]' < <(echo '$(ECS_TFSTATE)')))
+export ECS_CLUSTER_NAME := $(if $(ECS_CLUSTER_NAME),$(ECS_CLUSTER_NAME),$(shell jq -r '.resources[]|select(.type=="aws_ecs_cluster")|.instances[].attributes.name' < <(cat ecs-tfstate.tmp)))
+export ECS_SEC_GROUP := $(if $(ECS_SEC_GROUP),$(ECS_SEC_GROUP),$(shell jq -r '.resources[]|select(.name=="ecs_node_sg")|.instances[].attributes.id' < <(cat ecs-tfstate.tmp)))
+export ECS_SUBNET_1 := $(if $(ECS_SUBNET_1),$(ECS_SUBNET_1),$(shell jq -r '.resources[]|select(.name=="ecs_nlb")|.instances[].attributes.subnets[0]' < <(cat ecs-tfstate.tmp)))
+export ECS_SUBNET_2 := $(if $(ECS_SUBNET_2),$(ECS_SUBNET_2),$(shell jq -r '.resources[]|select(.name=="ecs_nlb")|.instances[].attributes.subnets[1]' < <(cat ecs-tfstate.tmp)))
+export ECS_SUBNET_3 := $(if $(ECS_SUBNET_3),$(ECS_SUBNET_3),$(shell jq -r '.resources[]|select(.name=="ecs_nlb")|.instances[].attributes.subnets[2]' < <(cat ecs-tfstate.tmp)))
 export ECS_EC2_IPS := $(if $(ECS_EC2_IPS),$(ECS_EC2_IPS),$(shell aws ec2 describe-instances --filters "Name=instance.group-id,Values=$(ECS_SEC_GROUP)" --query 'Reservations[*].Instances[*].[PrivateIpAddress]' --output text | sort))
 export ECS_EC2_IP := $(if $(ECS_EC2_IP),$(ECS_EC2_IP),$(shell echo $(ECS_EC2_IPS) | cut -d' ' -f1))
-export ECS_VPC := $(if $(ECS_VPC),$(ECS_VPC),$(shell jq -r '.resources[]|select(.name=="ecs_node_sg")|.instances[].attributes.vpc_id' < <(echo '$(ECS_TFSTATE)')))
+export ECS_VPC := $(if $(ECS_VPC),$(ECS_VPC),$(shell jq -r '.resources[]|select(.name=="ecs_node_sg")|.instances[].attributes.vpc_id' < <(cat ecs-tfstate.tmp)))
 export ECS_DNS_NAMESPACE?=playground
 export ECS_SVC_DISCOVER?=--private-dns-namespace $(ECS_DNS_NAMESPACE) --vpc $(ECS_VPC) --enable-service-discovery
 
