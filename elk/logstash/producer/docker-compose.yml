@@ -6,3 +6,10 @@ services:
       - "LOG_LEVEL=error"
       - "KAFKA_BOOTSTRAP_BROKERS=${MSK_BOOTSTRAP_BROKERS}"
       - "KAFKA_TOPIC=${KAFKA_TOPIC}"
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "eu-west-2"
+        awslogs-group: "/aws/ecs/internal-staging/telemetry/logstash-producer"
+        awslogs-stream-prefix: "playground"
+        retention_in_days: 30
