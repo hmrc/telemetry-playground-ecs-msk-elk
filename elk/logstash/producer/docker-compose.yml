@@ -12,4 +12,3 @@ services:
         awslogs-region: "eu-west-2"
         awslogs-group: "/aws/ecs/internal-staging/telemetry/logstash-producer"
         awslogs-stream-prefix: "playground"
-        retention_in_days: 30
