@@ -5,7 +5,7 @@ Play with the AWS MSK service. Produce and consume a topic via logstash and inge
 The following services and associated ECS tasks are deployed:
 
 | Service | docker compose |
-|-|-|
+|---:|:---|
 | [elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/index.html) | [elk/elasticsearch/docker-compose.yml](elk/elasticsearch/docker-compose.yml) |
 | [kibana](https://www.elastic.co/guide/en/kibana/6.8/index.html) | [elk/kibana/docker-compose.yml](elk/kibana/docker-compose.yml) |
 | [logstash-consumer](https://www.elastic.co/guide/en/logstash/6.8/index.html) | [elk/logstash/consumer/docker-compose.yml](elk/logstash/consumer/docker-compose.yml) |
@@ -16,31 +16,37 @@ The following services and associated ECS tasks are deployed:
 
 NOTE: If external resource changes (for example MSK cluster) you'll need to re-deploy since service configurations are baked into ECS task and service definitions.
 
-# Set-up
+## Set-up
+
 * Install [ecs-cli](https://github.com/aws/amazon-ecs-cli)
 * Install [jq](https://github.com/stedolan/jq)
 * Install [kafka](https://kafka.apache.org/downloads) [2.12-2.3.1](https://www.apache.org/dyn/closer.cgi?path=/kafka/2.3.1/kafka_2.12-2.3.1.tgz)
 * Clone this repository
 * Enable [Task Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html#task-networking-considerations)
+
 ```
 make ecs-task-networking
 ```
+
 NOTE: Ensure you `aws-profile` wrap any invocation of `make`
 
-# Uploading artifacts to ECR
+## Uploading artifacts to ECR
+
 Do the following to build and upload images to ECR:
 * `cd elk/logstash`
 * `make ecr-repo # Do this if ECR repsoitories don't exist`
 * `make build ecr-tag ecr-login ecr-push`
 
-# Managing stack
+## Managing stack
+
 Do the following to create the stack:
 * `make ecs-svc-up # Bring the ECS services up (includes service discovery)`
 * `make ecs-svc-down # Bring the ECS services down`
 
 TODO: Automate SG rule to allow ECS to access MSK
 
-# SSH tunnel to ECS EC2 host
+## SSH tunnel to ECS EC2 host
+
 To set up the port mappings from your localhost to the ECS cluster, Zookeeper and Kafka broker run:
 ```
 make ecs-tunnel-up
@@ -68,10 +74,10 @@ To take down the port mappings run:
 make ecs-tunnel-down
 ```
 
-# Standard make targets
+## Standard make targets
 
 | Target | Description |
-|-|-|
+|---:|:---|
 | build | Build images |
 | ecr-login | Login to ECR |
 | ecr-push | Push locally built images to ECR |
@@ -88,7 +94,16 @@ make ecs-tunnel-down
 | msk-topic-create | Create and configure playground kafka topic NOTE: Run only if `make ecs-tunnel-up ecs-tunnel-check` is OK |
 | var-dump | Dump the make variables set for AWS/ECS/MSK |
 
-# Troubleshooting
-## MSK can not be reached
+## Restarting a service
+
+```bash
+aws-profile -p <profile> \
+    aws ecs --cluster=telemetry update-service --force-new-deployment --service=<service-name>
+```
+
+## Troubleshooting
+
+### MSK can not be reached
+
 * Check the MSK security group rules by running `make msk-dump-sg`
 * Check the SSH tunnel by running `make ecs-tunnel-check`
