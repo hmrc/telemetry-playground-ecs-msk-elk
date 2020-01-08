@@ -3,7 +3,7 @@ services:
   logstash-consumer:
     image: '$IMAGE_TAG'
     environment:
-      - "LOG_LEVEL=error"
+      - "LOG_LEVEL=debug"
       - "KAFKA_BOOTSTRAP_BROKERS=${MSK_BOOTSTRAP_BROKERS}"
       - "ES_HOST=${ES_HOST}"
       - "KAFKA_TOPIC=${KAFKA_TOPIC}"

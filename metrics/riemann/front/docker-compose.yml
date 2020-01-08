@@ -1,0 +1,10 @@
+version: '3'
+services:
+  riemann-front:
+    image: '$IMAGE_TAG'
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "eu-west-2"
+        awslogs-group: "/aws/ecs/internal-staging/telemetry/riemann-front"
+        awslogs-stream-prefix: "playground"

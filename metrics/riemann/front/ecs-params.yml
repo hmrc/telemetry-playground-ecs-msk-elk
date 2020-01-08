@@ -1,0 +1,19 @@
+version: 1
+task_definition:
+  ecs_network_mode: awsvpc
+  task_role_arn: arn:aws:iam::852767124675:role/playground_s3_read_only
+  services:
+    logstash-producer:
+      essential: true
+      cpu_shares: 1
+      mem_reservation: 1024M
+      init_process_enabled: true
+run_params:
+  network_configuration:
+    awsvpc_configuration:
+      subnets:
+        - ${ECS_SUBNET_1}
+        - ${ECS_SUBNET_2}
+        - ${ECS_SUBNET_3}
+      security_groups:
+        - ${ECS_SEC_GROUP}

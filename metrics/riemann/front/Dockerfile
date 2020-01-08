@@ -1,4 +1,4 @@
-FROM docker.elastic.co/logstash/logstash:7.5.1
+FROM riemannio/riemann:0.3.5
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -10,4 +10,6 @@ LABEL maintainer="service_telemetry.dog+bristol@digital.hmrc.gov.uk"
 LABEL org.label-schema.schema-version="1.0"
 LABEL org.label-schema.vendor="HMRC Telemetry"
 
-ADD kafka-consumer.conf /usr/share/logstash/pipeline/
+COPY riemann-front.config /etc/riemann.config
+
+ENTRYPOINT ["/bin/riemann"]

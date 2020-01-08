@@ -32,3 +32,7 @@ ecs-svc-up:
 ecs-svc-down:
 	ecs-cli compose $(ECS_CLI_ARGS) service down
 .PHONY: ecs-svc-down
+
+ecs-svc-redeploy:
+	aws ecs --cluster=$(ECS_CLUSTER_NAME) update-service --force-new-deployment --service=$(IMAGE_NAME)
+.PHONY: ecs-svc-redeploy

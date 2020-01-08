@@ -1,7 +1,7 @@
 version: '3'
 services:
   kafdrop:
-    image: obsidiandynamics/kafdrop:latest
+    image: obsidiandynamics/kafdrop:3.20.0-SNAPSHOT
     ports:
       - 9000:9000
     environment:
