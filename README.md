@@ -14,6 +14,11 @@ The following services and associated ECS tasks are deployed:
 | [kafdrop](https://github.com/obsidiandynamics/kafdrop) | [kafka/kafdrop/docker-compose.yml](kafka/kafdrop/docker-compose.yml) |
 | [ksql](https://github.com/confluentinc/ksql) | [kafka/ksql/docker-compose.yml](kafka/ksql/docker-compose.yml) |
 
+
+| Task | docker compose |
+|---:|:---|
+| [haggar](https://github.com/gorsuch/haggar) | [metrics/haggar/docker-compose.yml](metrics/haggar/docker-compose.yml) |
+
 NOTE: If external resource changes (for example MSK cluster) you'll need to re-deploy since service configurations are baked into ECS task and service definitions.
 
 ## Set-up
@@ -44,6 +49,14 @@ Do the following to create the stack:
 * `make ecs-svc-down # Bring the ECS services down`
 
 TODO: Automate SG rule to allow ECS to access MSK
+
+## Managing metric source
+
+Do the following to manage the metrics source workflow:
+* `cd metrics/haggar`
+* `make ecs-create # Create the metrics task`
+* `make ecs-up # Run the metrics task`
+* `make ecs-down # Stop the metrics task`
 
 ## SSH tunnel to ECS EC2 host
 

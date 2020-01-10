@@ -1,0 +1,6 @@
+version: '3'
+services:
+  haggar:
+    image: egaillardon/haggar:1.0.1
+    command:
+      - -carbon=riemann-front:3003
