@@ -1,7 +1,9 @@
 include ../../common.mk
 
+METRIC_ROOT:=haggar
+
 ecs-create:
-	ecs-cli compose --cluster $(ECS_CLUSTER_NAME) create
+	env METRIC_ROOT=$(METRIC_ROOT) ecs-cli compose --cluster $(ECS_CLUSTER_NAME) create
 .PHONY: ecs-create
 
 ecs-up:
@@ -13,5 +15,5 @@ ecs-down:
 .PHONY: ecs-down
 
 ecs-config:
-	@docker-compose config
+	@env METRIC_ROOT=$(METRIC_ROOT) docker-compose config
 .PHONY: ecs-config

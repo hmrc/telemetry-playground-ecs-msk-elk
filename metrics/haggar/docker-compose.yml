@@ -2,5 +2,7 @@ version: '3'
 services:
   haggar:
     image: egaillardon/haggar:1.0.1
+    environment:
+      - METRIC_ROOT=${METRIC_ROOT-haggar}
     command:
-      - -carbon=riemann-front:3003
+      - -carbon=riemann-front:3003 -prefix=${METRIC_ROOT-haggar}
