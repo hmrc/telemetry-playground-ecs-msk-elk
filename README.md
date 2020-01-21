@@ -55,8 +55,12 @@ TODO: Automate SG rule to allow ECS to access MSK
 Do the following to manage the metrics source workflow:
 * `cd metrics/haggar`
 * `make ecs-create # Create the metrics task`
-* `make ecs-up # Run the metrics task`
+* `make ecs-up # Run the metrics task with default prefix 'haggar'`
 * `make ecs-down # Stop the metrics task`
+
+To set a custom prefix for haggar use:
+* `cd metrics/haggar`
+* `make ecs-up -e METRIC_ROOT=gonzo # Run the metrics task with custom prefix 'gonzo'`
 
 ## SSH tunnel to ECS EC2 host
 

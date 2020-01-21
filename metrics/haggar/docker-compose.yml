@@ -2,5 +2,19 @@ version: '3'
 services:
   haggar:
     image: egaillardon/haggar:1.0.1
-    command:
-      - -carbon=riemann-front:3003
+    environment:
+      - METRIC_ROOT=${METRIC_ROOT-haggar}
+      - RIEMANN_PRODUCER_DNS=${RIEMANN_PRODUCER_DNS-riemann-front.telemetry.internal}
+      - RIEMANN_PRODUCER_PORT=${RIEMANN_PRODUCER_PORT-3003}
+    entrypoint:
+      - bash 
+      - -c 
+      - |
+        echo "Waiting for ${RIEMANN_PRODUCER_DNS}:${RIEMANN_PRODUCER_PORT} to be available ⏳"
+        while [ $$(python -c "import socket;print(True) if 0 == socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect_ex(('${RIEMANN_PRODUCER_DNS}',${RIEMANN_PRODUCER_PORT})) else False") == "False" ] ; do
+          echo "Sleeping for 5 seconds"
+          sleep 5 
+        done
+        echo "Starting haggar"
+        haggar -carbon=${RIEMANN_PRODUCER_DNS}:${RIEMANN_PRODUCER_PORT} -prefix=${METRIC_ROOT}
+        sleep infinity
