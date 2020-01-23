@@ -8,7 +8,7 @@ endif
 # Use 'bash' and not 'sh'
 export SHELL = /bin/bash
 
-export KAFKA_TOPIC=walking-skeleton
+export KAFKA_TOPIC=logs
 export ES_PORT?=9200
 
 # image LABEL's
