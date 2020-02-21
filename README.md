@@ -120,6 +120,15 @@ aws-profile -p <profile> \
 
 ## Troubleshooting
 
+### AssumeRoleTokenProviderNotSetError: assume role with MFA enabled, but AssumeRoleTokenProvider session option not set.
+
+If the following command is run `ecs-cli ps --cluster telemetry` and the above error is produced, it should be
+confirmed with `env | grep AWS` that you do not have `AWS_PROFILE` environment variable set. If the variable *is* set then
+run `unset AWS_PROFILE` to remove the variable. The issue is that currently the tool does not support MFA role profiles.
+
+Further information: 
+[amazon-ecs-cli credentials order of precedence](https://github.com/aws/amazon-ecs-cli/blob/3970a6c1f38bc750ff9c068f53220aa177c7df54/ecs-cli/modules/config/config_v1.go#L108)
+
 ### MSK can not be reached
 
 * Check the MSK security group rules by running `make msk-dump-sg`
