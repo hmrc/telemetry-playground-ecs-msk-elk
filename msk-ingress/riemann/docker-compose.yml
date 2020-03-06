@@ -1,23 +1,39 @@
 version: "3"
 services:
-  riemann-metrics:
-    image: riemannio/riemann:latest
-    environment:
-      - "BOOTSTRAP_SERVERS=${MSK_BOOTSTRAP_BROKERS}"
-      - "KAFKA_TOPIC=${KAFKA_METRICS_TOPIC}"
-    ports:
-      - "127.0.0.1:3003:3003"
-    volumes:
-      - ./riemann-metrics.config:/etc/riemann.config
+#  riemann-metrics:
+#    image: riemannio/riemann:latest
+#    environment:
+#      - "BOOTSTRAP_SERVERS=${MSK_BOOTSTRAP_BROKERS}"
+#      - "KAFKA_TOPIC=${KAFKA_METRICS_TOPIC}"
+#    ports:
+#      - "3003:3003"
+#    volumes:
+#      - ./riemann-metrics.config:/etc/riemann.config
   riemann-logs:
     image: riemannio/riemann:latest
     environment:
       - "BOOTSTRAP_SERVERS=${MSK_BOOTSTRAP_BROKERS}"
       - "KAFKA_TOPIC=${KAFKA_LOGS_TOPIC}"
     ports:
-      - "127.0.0.1:5555:5555"
+      - "5555:5555"
     volumes:
       - ./riemann-logs.config:/etc/riemann.config
-  metrics-producer:
-    image: alpine:latest
-    command: "apk add --update netcat-openbsd && nc --help"
+  riemann-fluentd:
+    image: riemann-fluentd:latest
+    ports:
+      - "24224:24224"
+  logs-producer:
+    image: bash:latest
+    depends_on:
+      - riemann-fluentd
+    volumes:
+      - ./produce-logs.sh:/tmp/produce-logs.sh
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "host.docker.internal:24224"
+        tag: "riemann.{{.ID}}"
+    entrypoint: /tmp/produce-logs.sh
+#  metrics-producer:
+#    image: alpine:latest
+#    command: "apk add --update netcat-openbsd && nc --help"
