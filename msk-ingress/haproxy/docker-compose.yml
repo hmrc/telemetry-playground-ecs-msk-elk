@@ -1,0 +1,17 @@
+version: '3'
+services:
+  logs-proxy:
+    image: '$IMAGE_TAG'
+    environment:
+      - "KAFKA_BROKER_1=127.0.0.1:39092"
+      - "KAFKA_BROKER_2=${KAFKA_BROKER_2}"
+      - "KAFKA_BROKER_3=${KAFKA_BROKER_3}"
+      - "KAFKA_TOPIC=${KAFKA_LOGS_TOPIC}"
+    ports:
+      - 4444:4444
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "eu-west-2"
+        awslogs-group: "/aws/ecs/telemetry/logs-proxy"
+        awslogs-stream-prefix: "playground"

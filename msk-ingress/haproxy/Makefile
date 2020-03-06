@@ -1,9 +1,8 @@
-
-IMAGE_NAME=logstash-producer
+IMAGE_NAME=logs-proxy
 IMAGE_TAG=$(IMAGE_NAME):latest
 IMAGE_TAG_ECR=$(AWS_ECR_REG)/$(IMAGE_NAME)
 
-include ../../../common.mk
+include ../../common.mk
 
 all: build ecr-tag ecr-push
 

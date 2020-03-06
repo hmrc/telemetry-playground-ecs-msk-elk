@@ -82,7 +82,7 @@ ecr-repo:
 	-aws ecr create-repository --repository-name $(IMAGE_NAME)
 .PHONY: ecr-repo
 
-ecr-push:
+ecr-push: ecr-login
 	docker push $(AWS_ECR_REG)/$(IMAGE_NAME)
 .PHONY: ecr-push
 

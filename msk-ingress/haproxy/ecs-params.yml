@@ -2,7 +2,7 @@ version: 1
 task_definition:
   ecs_network_mode: awsvpc
   services:
-    logstash-producer:
+    logs-proxy:
       essential: true
       cpu_shares: 1
       mem_reservation: 1024M
