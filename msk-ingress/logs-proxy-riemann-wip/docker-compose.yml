@@ -1,0 +1,30 @@
+version: "3"
+services:
+  riemann-logs:
+    image: riemannio/riemann:latest
+    environment:
+      - "BOOTSTRAP_SERVERS=${MSK_BOOTSTRAP_BROKERS}"
+      - "KAFKA_TOPIC=${KAFKA_LOGS_TOPIC}"
+    ports:
+      - "5555:5555"
+    volumes:
+      - ./riemann-logs.config:/etc/riemann.config
+  riemann-fluentd:
+    build:
+      context: .
+      dockerfile: Dockerfile-riemann-fluentd
+    image: riemann-fluentd:latest
+    ports:
+      - "24224:24224"
+  logs-producer:
+    image: bash:latest
+    depends_on:
+      - riemann-fluentd
+    volumes:
+      - ./produce-logs.sh:/tmp/produce-logs.sh
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "host.docker.internal:24224"
+        tag: "riemann.{{.ID}}"
+    entrypoint: /tmp/produce-logs.sh
