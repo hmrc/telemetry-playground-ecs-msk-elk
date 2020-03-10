@@ -5,7 +5,7 @@ IMAGE_TAG_ECR=$(AWS_ECR_REG)/$(IMAGE_NAME)
 
 include ../../../common.mk
 
-all: build ecr-tag
+all: build ecr-tag ecr-push
 
 ECS_ENV_VARS=MSK_BOOTSTRAP_BROKERS=$(MSK_BOOTSTRAP_BROKERS) IMAGE_TAG=$(AWS_ECR_REG)/$(IMAGE_TAG)
 ECS_CLI_ARGS= --cluster $(ECS_CLUSTER_NAME) --project-name $(IMAGE_NAME)

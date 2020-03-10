@@ -1,14 +1,14 @@
 version: '3'
 services:
   logstash-producer:
-    image:  '$IMAGE_TAG'
+    image: '$IMAGE_TAG'
     environment:
-      - "LOG_LEVEL=error"
+      - "LOG_LEVEL=info"
       - "KAFKA_BOOTSTRAP_BROKERS=${MSK_BOOTSTRAP_BROKERS}"
       - "KAFKA_TOPIC=${KAFKA_TOPIC}"
     logging:
       driver: "awslogs"
       options:
         awslogs-region: "eu-west-2"
-        awslogs-group: "/aws/ecs/internal-staging/telemetry/logstash-producer"
+        awslogs-group: "/aws/ecs/telemetry/logstash-producer"
         awslogs-stream-prefix: "playground"
