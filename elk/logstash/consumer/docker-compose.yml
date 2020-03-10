@@ -8,3 +8,9 @@ services:
       - "ES_HOST=${ES_HOST}"
       - "KAFKA_TOPIC=${KAFKA_TOPIC}"
       - "ES_PORT=${ES_PORT}"
+    logging:
+      driver: "awslogs"
+      options:
+        awslogs-region: "eu-west-2"
+        awslogs-group: "/aws/ecs/telemetry/logstash-consumer"
+        awslogs-stream-prefix: "playground"

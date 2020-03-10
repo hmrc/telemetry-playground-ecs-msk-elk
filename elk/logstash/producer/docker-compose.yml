@@ -1,7 +1,7 @@
 version: '3'
 services:
   logstash-producer:
-    image:  '$IMAGE_TAG'
+    image: '$IMAGE_TAG'
     environment:
       - "LOG_LEVEL=info"
       - "KAFKA_BOOTSTRAP_BROKERS=${MSK_BOOTSTRAP_BROKERS}"
