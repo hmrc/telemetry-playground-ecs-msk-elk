@@ -1,7 +1,7 @@
 ecs-create ecs-up ecs-down ecs-svc-down:
-	-cd haproxy && make $@ &
+	-cd logs-proxy && make $@ &
 .PHONY: ecs-create ecs-up ecs-down ecs-svc-down
 
 ecs-svc-up:
-	-cd haproxy && make $@
+	-cd logs-proxy && make $@
 .PHONY: ecs-svc-up
