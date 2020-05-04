@@ -44,13 +44,13 @@ If you need to bring you cluster down to restart, run the following command
 docker-compose -f docker-compose.yml down --volumes
 ```
 
-# Phase 3: Testing audit logging
+## Phase 3: Testing audit logging
 
 Once you have a cluster running into which you have authenticated, you should now see entries in your audit log. It is a
 very good idea to navigate to the sample data URL https://localhost:5601/app/kibana#/home/tutorial_directory/sampleData
 and load the web logs in order to have indices with which to investigate.
 
-# Phase 4: Testing slow running searches
+## Phase 4: Testing slow running searches
 
 ```
 PUT /kibana_sample_data_logs/_settings
