@@ -1,0 +1,14 @@
+---
+cluster:
+  name: "docker-cluster"
+network:
+  host: 0.0.0.0
+xpack:
+  security:
+    audit:
+      enabled: true
+      logfile:
+        events:
+          emit_request_body: true
+path:
+  logs: /usr/share/elasticsearch/logs
