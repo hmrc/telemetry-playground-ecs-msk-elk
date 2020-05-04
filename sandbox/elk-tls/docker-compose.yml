@@ -31,7 +31,7 @@ services:
       - certs:$CERTS_DIR
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-      - ./log-output/01:/usr/share/elasticsearch/logs:rw
+      - ./logs/01:/usr/share/elasticsearch/logs:rw
     ports:
       - 9200:9200
     networks:
@@ -71,7 +71,7 @@ services:
       - certs:$CERTS_DIR
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-      - ./log-output/02:/usr/share/elasticsearch/logs:rw
+      - ./logs/02:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
   es03:
@@ -104,7 +104,7 @@ services:
       - certs:$CERTS_DIR
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-      - ./log-output/03:/usr/share/elasticsearch/logs:rw
+      - ./logs/03:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
   kib01:

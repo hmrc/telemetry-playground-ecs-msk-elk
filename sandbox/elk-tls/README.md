@@ -50,27 +50,27 @@ Once you have a cluster running into which you have authenticated, you should no
 very good idea to navigate to the sample data URL https://localhost:5601/app/kibana#/home/tutorial_directory/sampleData
 and load the web logs in order to have indices with which to investigate.
 
-## Phase 4: Testing slow running searches
+## Phase 4: Testing slow running searches with artificially low threshold
 
 ```
 GET /kibana_sample_data_logs/_settings
 
 PUT /kibana_sample_data_logs/_settings
 {
-"index.search.slowlog.threshold.query.warn": "0s",
-"index.search.slowlog.threshold.query.info": "5s",
-"index.search.slowlog.threshold.query.debug": "2s",
-"index.search.slowlog.threshold.query.trace": "500ms",
-"index.search.slowlog.threshold.fetch.warn": "0s",
-"index.search.slowlog.threshold.fetch.info": "800ms",
-"index.search.slowlog.threshold.fetch.debug": "500ms",
-"index.search.slowlog.threshold.fetch.trace": "200ms",
-"index.indexing.slowlog.threshold.index.warn": "0s",
-"index.indexing.slowlog.threshold.index.info": "5s",
-"index.indexing.slowlog.threshold.index.debug": "2s",
-"index.indexing.slowlog.threshold.index.trace": "500ms",
-"index.indexing.slowlog.level": "trace",
-"index.indexing.slowlog.source": "100"
+"index.search.slowlog.threshold.query.warn": "10ms",
+"index.search.slowlog.threshold.query.info": "10ms",
+"index.search.slowlog.threshold.query.debug": "10ms",
+"index.search.slowlog.threshold.query.trace": "10ms",
+"index.search.slowlog.threshold.fetch.warn": "10ms",
+"index.search.slowlog.threshold.fetch.info": "10ms",
+"index.search.slowlog.threshold.fetch.debug": "10ms",
+"index.search.slowlog.threshold.fetch.trace": "10ms",
+"index.indexing.slowlog.threshold.index.warn": "10ms",
+"index.indexing.slowlog.threshold.index.info": "10ms",
+"index.indexing.slowlog.threshold.index.debug": "10ms",
+"index.indexing.slowlog.threshold.index.trace": "10ms",
+"index.indexing.slowlog.level": "warn",
+"index.indexing.slowlog.source": "10000"
 }
 ```
 
