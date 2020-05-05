@@ -75,4 +75,9 @@ PUT /kibana_sample_data_logs/_settings
 ```
 
 ## References
-[Run in Docker with TLS enabled](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-docker.html#get-started-docker-tls)
+* [Jira Ticket](https://jira.tools.tax.service.gov.uk/browse/TEL-1886)
+* [Run in Docker with TLS enabled](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-docker.html#get-started-docker-tls)
+* [TLS enabled stack source code](https://github.com/elastic/stack-docs/blob/master/docs/en/getting-started/docker/elastic-docker-tls.yml)
+* [Elasticsearch auditing-settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/auditing-settings.html)
+* [Elasticsearch fine tuning queries](https://www.elastic.co/blog/advanced-tuning-finding-and-fixing-slow-elasticsearch-queries)
+* [Elasticsearch slowlog index reference](https://www.elastic.co/guide/en/elasticsearch/reference/7.0/index-modules-slowlog.html)
