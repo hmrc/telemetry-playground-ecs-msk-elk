@@ -7,16 +7,24 @@ services:
     command: >
       bash -c '
         yum install -y -q -e 0 unzip;
-        if [[ ! -f /certs/bundle.zip ]]; then
-          bin/elasticsearch-certutil cert --silent --pem --in config/instances.yml -out /certs/bundle.zip;
-          unzip /certs/bundle.zip -d /certs;
-        fi;
+        KEY_PASSPHRASE=$$(cat ./passphrase)
+        bin/elasticsearch-certutil ca --silent \
+                                      --pass $${KEY_PASSPHRASE} \
+                                      --out elastic-stack-ca.p12;
+        bin/elasticsearch-certutil cert --silent \
+                                        --pass $${KEY_PASSPHRASE} \
+                                        --out elastic-certificates.zip \
+                                        --ca elastic-stack-ca.p12 \
+                                        --ca-pass $${KEY_PASSPHRASE} \
+                                        --in instances.yml;
+        unzip -o elastic-certificates.zip -d /certs;
         chown -R 1000:0 /certs
       '
     working_dir: /usr/share/elasticsearch
     volumes:
       - certs:/certs
-      - ./config:/usr/share/elasticsearch/config
+      - ./config-certs/instances.yml:/usr/share/elasticsearch/instances.yml
+      - ./passphrase:/usr/share/elasticsearch/passphrase:ro
     networks:
       - elastic
 

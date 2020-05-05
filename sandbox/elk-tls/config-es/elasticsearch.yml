@@ -1,0 +1,54 @@
+---
+bootstrap:
+  memory_lock: true
+cluster:
+  name: es-docker-cluster
+logger:
+  index:
+    indexing:
+      slowlog: "warn"
+    search:
+      slowlog: "warn"
+network:
+  host: 0.0.0.0
+xpack:
+  license:
+    self_generated:
+      type: trial
+  monitoring:
+    collection:
+      enabled: true
+  security:
+    enabled: true
+    audit:
+      enabled: true
+      logfile:
+        events:
+          emit_request_body: true
+    http:
+      ssl:
+        enabled: true
+        keystore:
+          key_password: telemetry
+          password: telemetry
+          path: /usr/share/elasticsearch/config/certificates/keystore.p12
+          type: PKCS12
+        truststore:
+          password: telemetry
+          path: /usr/share/elasticsearch/config/certificates/truststore.p12
+          type: PKCS12
+    transport:
+      ssl:
+        enabled: true
+        keystore:
+          key_password: telemetry
+          password: telemetry
+          path: /usr/share/elasticsearch/config/certificates/keystore.p12
+          type: PKCS12
+        truststore:
+          password: telemetry
+          path: /usr/share/elasticsearch/config/certificates/truststore.p12
+          type: PKCS12
+        verification_mode: certificate
+path:
+  logs: /usr/share/elasticsearch/logs

@@ -8,10 +8,11 @@ logging output to a RollingFile appender.
 ## Phase 0: Environment Variables
 
 ```bash
-export COMPOSE_PROJECT_NAME=es
+export CA_DIR=/usr/share/elasticsearch/config/certificate-authorities
 export CERTS_DIR=/usr/share/elasticsearch/config/certificates
-export KEY_PASSPHRASE=supersecretpassword
+export COMPOSE_PROJECT_NAME=es
 export VERSION=7.6.0
+echo superSecretPasswordForPrivateKeyAndStores > ./passphrase
 ```
 
 ## Phase 1.0: Generate certificates
