@@ -6,6 +6,10 @@ target
 lib_managed
 tmp
 *.tmp
+*.crt
+*.key
+*.pem
+*.p12
 .history
 dist
 /.idea

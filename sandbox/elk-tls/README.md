@@ -10,26 +10,36 @@ logging output to a RollingFile appender.
 ```bash
 export COMPOSE_PROJECT_NAME=es
 export CERTS_DIR=/usr/share/elasticsearch/config/certificates
+export KEY_PASSPHRASE=supersecretpassword
 export VERSION=7.6.0
 ```
 
-## Phase 1: Generate certificates
+## Phase 1.0: Generate certificates
 
 ```bash
 docker-compose -f create-certs.yml run --rm create_certs
 ```
 
+## Phase 1.1: Generate keystore (assuming use of AWS private certificates)
+
+If you do not wish to generate new certs and have some AWS ACM private certificates to use then you can the following
+to generate a keystore
+
+```bash
+docker-compose -f create-keystore.yml run --rm create_keystore
+```
+
 ## Phase 2: Bring up cluster and generate passwords
 
 ```bash
-docker-compose -f docker-compose.yml up --detach
+docker-compose up -d
 
 # When the cluster is up and running, run the following to extract passwords
-docker exec es01 /bin/bash -c "bin/elasticsearch-setup-passwords auto --batch --url https://es01:9200"
+docker exec es01 /bin/bash -c "bin/elasticsearch-setup-passwords auto --batch --url https://es01.telemetry.internal:9200"
 
 # Restart the cluster
 docker-compose stop
-docker-compose -f docker-compose.yml up --detach
+docker-compose up -d
 
 # Access Kibana using the _elastic_ username and password derived from above
 # Don't use Chrome as it complains about the certificate and never lets you continue to the site
