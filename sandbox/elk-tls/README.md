@@ -96,12 +96,30 @@ openssl pkcs12 -in truststore.p12 -out certificate.pem -nodes
 
 # View that certificate
 cat certificate.pem | openssl x509
+
+# Create pem from pkcs12 without private key (for CA certs)
+openssl pkcs12 -in path.p12 -out newfile.crt.pem -nokeys
+
+# How to create pkcs12 truststore using openssl
+openssl pkcs12 -export -nokeys -in certificate.cer -out pkcs12.pfx
 ```
 
 ## References
 * [Jira Ticket](https://jira.tools.tax.service.gov.uk/browse/TEL-1886)
 * [Run in Docker with TLS enabled](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-docker.html#get-started-docker-tls)
-* [TLS enabled stack source code](https://github.com/elastic/stack-docs/blob/master/docs/en/getting-started/docker/elastic-docker-tls.yml)
+* [Getting started guide](https://github.com/elastic/stack-docs/blob/master/docs/en/getting-started/get-started-docker.asciidoc)
+* [TLS enabled stack original source code](https://github.com/elastic/stack-docs/blob/master/docs/en/getting-started/docker/elastic-docker-tls.yml)
+* [Elasticsearch Encrypting Communications](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-tls.html)
+* [Elasticsearch configuring security](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-security.html)
+* [Elasticsearch configure TLS/SSL & PKI Authentication](https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-pki-authentication)
 * [Elasticsearch auditing-settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/auditing-settings.html)
-* [Elasticsearch fine tuning queries](https://www.elastic.co/blog/advanced-tuning-finding-and-fixing-slow-elasticsearch-queries)
+* [Elasticsearch security-settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html)
+* [Elasticsearch elasticsearch-certutil tool](https://www.elastic.co/guide/en/elasticsearch/reference/current/certutil.htm)
+* [Elasticsearch elasticsearch-keystore tool](https://www.elastic.co/guide/en/elasticsearch/reference/current/elasticsearch-keystore.html)
 * [Elasticsearch slowlog index reference](https://www.elastic.co/guide/en/elasticsearch/reference/7.0/index-modules-slowlog.html)
+* [Elasticsearch fine tuning queries](https://www.elastic.co/blog/advanced-tuning-finding-and-fixing-slow-elasticsearch-queries)
+* [Kibana Settings](https://www.elastic.co/guide/en/kibana/current/settings.html)
+* [Kibana needs PEM files](https://discuss.elastic.co/t/why-does-elasticsearch-use-pkcs-12-while-kibana-needs-pem/161756/2)
+* [Setting up Elasticsearch and Kibana on Docker with X-Pack security enabled](http://codingfundas.com/setting-up-elasticsearch-6-8-with-kibana-and-x-pack-security-enabled/index.html)
+* [Learning to Love the Keystore](https://nicklang.com/posts/learning-to-love-the-keystore)
+* [OpenSSL Man Page](https://www.openssl.org/docs/man1.1.1/man1/openssl.html)
