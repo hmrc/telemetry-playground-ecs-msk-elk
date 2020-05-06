@@ -30,6 +30,7 @@ services:
       - xpack.security.transport.ssl.keystore.password=telemetry
       - xpack.security.transport.ssl.keystore.key_password=telemetry
       - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es01/es01.p12
+      - xpack.security.transport.ssl.truststore.password=telemetry
     ulimits:
       memlock:
         soft: -1
@@ -79,6 +80,7 @@ services:
       - xpack.security.transport.ssl.keystore.password=telemetry
       - xpack.security.transport.ssl.keystore.key_password=telemetry
       - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es02/es02.p12
+      - xpack.security.transport.ssl.truststore.password=telemetry
     ulimits:
       memlock:
         soft: -1
@@ -121,6 +123,7 @@ services:
       - xpack.security.transport.ssl.keystore.password=telemetry
       - xpack.security.transport.ssl.keystore.key_password=telemetry
       - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es03/es03.p12
+      - xpack.security.transport.ssl.truststore.password=telemetry
     ulimits:
       memlock:
         soft: -1
