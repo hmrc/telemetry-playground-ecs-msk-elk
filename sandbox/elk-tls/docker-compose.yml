@@ -21,14 +21,14 @@ services:
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/es01/es01.p12
       - xpack.security.http.ssl.keystore.password=telemetry
-#      - xpack.security.http.ssl.keystore.key_password=telemetry
+      - xpack.security.http.ssl.keystore.key_password=telemetry
       - xpack.security.http.ssl.truststore.path=$CERTS_DIR/es01/es01.p12
       - xpack.security.http.ssl.client_authentication=optional
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/es01/es01.p12
       - xpack.security.transport.ssl.keystore.password=telemetry
-#      - xpack.security.transport.ssl.keystore.key_password=telemetry
+      - xpack.security.transport.ssl.keystore.key_password=telemetry
       - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es01/es01.p12
     ulimits:
       memlock:
@@ -70,14 +70,14 @@ services:
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/es02/es02.p12
       - xpack.security.http.ssl.keystore.password=telemetry
-#      - xpack.security.http.ssl.keystore.key_password=telemetry
+      - xpack.security.http.ssl.keystore.key_password=telemetry
       - xpack.security.http.ssl.truststore.path=$CERTS_DIR/es02/es02.p12
       - xpack.security.http.ssl.client_authentication=optional
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/es02/es02.p12
       - xpack.security.transport.ssl.keystore.password=telemetry
-#      - xpack.security.transport.ssl.keystore.key_password=telemetry
+      - xpack.security.transport.ssl.keystore.key_password=telemetry
       - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es02/es02.p12
     ulimits:
       memlock:
@@ -112,14 +112,14 @@ services:
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/es03/es03.p12
       - xpack.security.http.ssl.keystore.password=telemetry
-#      - xpack.security.http.ssl.keystore.key_password=telemetry
+      - xpack.security.http.ssl.keystore.key_password=telemetry
       - xpack.security.http.ssl.truststore.path=$CERTS_DIR/es03/es03.p12
       - xpack.security.http.ssl.client_authentication=optional
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/es03/es03.p12
       - xpack.security.transport.ssl.keystore.password=telemetry
-#      - xpack.security.transport.ssl.keystore.key_password=telemetry
+      - xpack.security.transport.ssl.keystore.key_password=telemetry
       - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es03/es03.p12
     ulimits:
       memlock:
