@@ -13,7 +13,7 @@ services:
                                       --pass $${KEY_PASSPHRASE} \
                                       --out elastic-stack-ca.p12;
         bin/elasticsearch-certutil cert --silent \
-                                        --pass "" \
+                                        --pass $${KEY_PASSPHRASE} \
                                         --out es-certs.zip \
                                         --ca elastic-stack-ca.p12 \
                                         --ca-pass $${KEY_PASSPHRASE} \

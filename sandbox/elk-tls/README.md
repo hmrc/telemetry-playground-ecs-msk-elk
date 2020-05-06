@@ -114,7 +114,7 @@ openssl pkcs12 -export -nokeys -in certificate.cer -out pkcs12.pfx
 * [Elasticsearch configure TLS/SSL & PKI Authentication](https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-pki-authentication)
 * [Elasticsearch auditing-settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/auditing-settings.html)
 * [Elasticsearch security-settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html)
-* [Elasticsearch elasticsearch-certutil tool](https://www.elastic.co/guide/en/elasticsearch/reference/current/certutil.htm)
+* [Elasticsearch elasticsearch-certutil tool](https://www.elastic.co/guide/en/elasticsearch/reference/current/certutil.html)
 * [Elasticsearch elasticsearch-keystore tool](https://www.elastic.co/guide/en/elasticsearch/reference/current/elasticsearch-keystore.html)
 * [Elasticsearch slowlog index reference](https://www.elastic.co/guide/en/elasticsearch/reference/7.0/index-modules-slowlog.html)
 * [Elasticsearch fine tuning queries](https://www.elastic.co/blog/advanced-tuning-finding-and-fixing-slow-elasticsearch-queries)
