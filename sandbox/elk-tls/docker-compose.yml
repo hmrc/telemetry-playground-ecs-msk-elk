@@ -9,29 +9,10 @@ services:
       - discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#      - xpack.security.http.ssl.enabled=true
-#      - xpack.security.http.ssl.key=$CERTS_DIR/es01/es01.key
-#      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-#      - xpack.security.http.ssl.certificate=$CERTS_DIR/es01/es01.crt
-#      - xpack.security.transport.ssl.enabled=true
-#      - xpack.security.transport.ssl.verification_mode=certificate
-#      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-#      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es01/es01.crt
-#      - xpack.security.transport.ssl.key=$CERTS_DIR/es01/es01.key
-      - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/es01/es01.p12
-      - xpack.security.http.ssl.keystore.password=telemetry
-      - xpack.security.http.ssl.keystore.key_password=telemetry
       - xpack.security.http.ssl.truststore.path=$CERTS_DIR/es01/es01.p12
-      - xpack.security.http.ssl.truststore.password=telemetry
-      - xpack.security.http.ssl.client_authentication=optional
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/es01/es01.p12
-      - xpack.security.transport.ssl.keystore.password=telemetry
-      - xpack.security.transport.ssl.keystore.key_password=telemetry
       - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es01/es01.p12
-      - xpack.security.transport.ssl.truststore.password=telemetry
     ulimits:
       memlock:
         soft: -1
@@ -60,29 +41,10 @@ services:
       - discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#      - xpack.security.http.ssl.enabled=true
-#      - xpack.security.http.ssl.key=$CERTS_DIR/es02/es02.key
-#      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-#      - xpack.security.http.ssl.certificate=$CERTS_DIR/es02/es02.crt
-#      - xpack.security.transport.ssl.enabled=true
-#      - xpack.security.transport.ssl.verification_mode=certificate
-#      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-#      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es02/es02.crt
-#      - xpack.security.transport.ssl.key=$CERTS_DIR/es02/es02.key
-      - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/es02/es02.p12
-      - xpack.security.http.ssl.keystore.password=telemetry
-      - xpack.security.http.ssl.keystore.key_password=telemetry
       - xpack.security.http.ssl.truststore.path=$CERTS_DIR/es02/es02.p12
-      - xpack.security.http.ssl.truststore.password=telemetry
-      - xpack.security.http.ssl.client_authentication=optional
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/es02/es02.p12
-      - xpack.security.transport.ssl.keystore.password=telemetry
-      - xpack.security.transport.ssl.keystore.key_password=telemetry
       - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es02/es02.p12
-      - xpack.security.transport.ssl.truststore.password=telemetry
     ulimits:
       memlock:
         soft: -1
@@ -104,29 +66,10 @@ services:
       - discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#      - xpack.security.http.ssl.enabled=true
-#      - xpack.security.http.ssl.key=$CERTS_DIR/es03/es03.key
-#      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-#      - xpack.security.http.ssl.certificate=$CERTS_DIR/es03/es03.crt
-#      - xpack.security.transport.ssl.enabled=true
-#      - xpack.security.transport.ssl.verification_mode=certificate
-#      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-#      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es03/es03.crt
-#      - xpack.security.transport.ssl.key=$CERTS_DIR/es03/es03.key
-      - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/es03/es03.p12
-      - xpack.security.http.ssl.keystore.password=telemetry
-      - xpack.security.http.ssl.keystore.key_password=telemetry
       - xpack.security.http.ssl.truststore.path=$CERTS_DIR/es03/es03.p12
-      - xpack.security.http.ssl.truststore.password=telemetry
-      - xpack.security.http.ssl.client_authentication=optional
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/es03/es03.p12
-      - xpack.security.transport.ssl.keystore.password=telemetry
-      - xpack.security.transport.ssl.keystore.key_password=telemetry
       - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es03/es03.p12
-      - xpack.security.transport.ssl.truststore.password=telemetry
     ulimits:
       memlock:
         soft: -1
@@ -147,7 +90,7 @@ services:
     ports:
       - 5601:5601
     environment:
-      ELASTICSEARCH_PASSWORD: CJRZNlvZWINbRRSi5NMD
+      ELASTICSEARCH_PASSWORD: Fg6rQHyCARqoLs6lXCLd
     volumes:
       - certs:/usr/share/kibana/config/certificates
       - ./config-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml

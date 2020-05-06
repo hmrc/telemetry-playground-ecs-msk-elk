@@ -27,25 +27,22 @@ xpack:
           emit_request_body: true
     http:
       ssl:
+        client_authentication: optional
         enabled: true
-#        keystore:
-#          key_password: telemetry
-#          password: telemetry
-#          path: /usr/share/elasticsearch/config/certificates/keystore.p12
-#        truststore:
-#          password: telemetry
-#          path: /usr/share/elasticsearch/config/certificates/truststore.p12
+        keystore:
+          password: telemetry
+          key_password: telemetry
+        truststore:
+          password: telemetry
     transport:
       ssl:
         enabled: true
         verification_mode: certificate
-#        keystore:
-#          key_password: telemetry
-#          password: telemetry
-#          path: /usr/share/elasticsearch/config/certificates/keystore.p12
-#        truststore:
-#          password: telemetry
-#          path: /usr/share/elasticsearch/config/certificates/truststore.p12
+        keystore:
+          password: telemetry
+          key_password: telemetry
+        truststore:
+          password: telemetry
 path:
   data: /usr/share/elasticsearch/data
   logs: /usr/share/elasticsearch/logs
