@@ -1,13 +1,17 @@
 ---
 server:
   name: kib01
-  host: "kib01.telemetry.internal"
+  host: kib01.telemetry.internal
   ssl:
     enabled: true
     certificate: /usr/share/kibana/config/certificates/kib01/kib01.crt
     key: /usr/share/kibana/config/certificates/kib01/kib01.key
 
 elasticsearch:
+  hosts:
+    - https://es01.telemetry.internal:9200
+    - https://es02.telemetry.internal:9200
+    - https://es03.telemetry.internal:9200
   username: kibana
   ssl:
     verificationMode: certificate
