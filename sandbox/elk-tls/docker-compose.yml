@@ -9,10 +9,10 @@ services:
       - discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.http.ssl.keystore.path=$CERTS_DIR/es01/es01.p12
-      - xpack.security.http.ssl.truststore.path=$CERTS_DIR/es01/es01.p12
-      - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/es01/es01.p12
-      - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es01/es01.p12
+      - xpack.security.http.ssl.keystore.path=$CERTS_DIR/keystore.p12
+      - xpack.security.http.ssl.truststore.path=$CERTS_DIR/truststore.p12
+      - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/keystore.p12
+      - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/truststore.p12
     ulimits:
       memlock:
         soft: -1
@@ -41,10 +41,10 @@ services:
       - discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.http.ssl.keystore.path=$CERTS_DIR/es02/es02.p12
-      - xpack.security.http.ssl.truststore.path=$CERTS_DIR/es02/es02.p12
-      - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/es02/es02.p12
-      - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es02/es02.p12
+      - xpack.security.http.ssl.keystore.path=$CERTS_DIR/keystore.p12
+      - xpack.security.http.ssl.truststore.path=$CERTS_DIR/truststore.p12
+      - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/keystore.p12
+      - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/truststore.p12
     ulimits:
       memlock:
         soft: -1
@@ -66,10 +66,10 @@ services:
       - discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.http.ssl.keystore.path=$CERTS_DIR/es03/es03.p12
-      - xpack.security.http.ssl.truststore.path=$CERTS_DIR/es03/es03.p12
-      - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/es03/es03.p12
-      - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/es03/es03.p12
+      - xpack.security.http.ssl.keystore.path=$CERTS_DIR/keystore.p12
+      - xpack.security.http.ssl.truststore.path=$CERTS_DIR/truststore.p12
+      - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/keystore.p12
+      - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/truststore.p12
     ulimits:
       memlock:
         soft: -1
@@ -83,19 +83,19 @@ services:
     networks:
       - elastic
 
-  kib01.telemetry.internal:
-    image: docker.elastic.co/kibana/kibana:${VERSION}
-    container_name: kib01
-    depends_on: {"es01.telemetry.internal": {"condition": "service_healthy"}}
-    ports:
-      - 5601:5601
-    environment:
-      ELASTICSEARCH_PASSWORD: Fg6rQHyCARqoLs6lXCLd
-    volumes:
-      - certs:/usr/share/kibana/config/certificates
-      - ./config-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-    networks:
-      - elastic
+#  kib01.telemetry.internal:
+#    image: docker.elastic.co/kibana/kibana:${VERSION}
+#    container_name: kib01
+#    depends_on: {"es01.telemetry.internal": {"condition": "service_healthy"}}
+#    ports:
+#      - 5601:5601
+#    environment:
+#      ELASTICSEARCH_PASSWORD: Fg6rQHyCARqoLs6lXCLd
+#    volumes:
+#      - certs:/usr/share/kibana/config/certificates
+#      - ./config-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+#    networks:
+#      - elastic
 
 volumes:
   certs:
@@ -105,8 +105,6 @@ volumes:
   data02:
     driver: local
   data03:
-    driver: local
-  keystore:
     driver: local
 
 networks:

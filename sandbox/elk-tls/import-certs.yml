@@ -8,12 +8,13 @@ services:
       bash -c '
         yum install -y -q -e 0 unzip openssl;
         KEY_PASSPHRASE=$$(cat ./passphrase);
-        cp ./ca.crt ./keystore.p12 ./truststore.p12 /certs
+        cp ./*.crt ./*.p12 ./*.key /certs
         openssl pkcs12 -in /certs/keystore.p12 -out out_key -nodes -passin pass:$${KEY_PASSPHRASE}
         openssl x509 -text -in out_key | grep telemetry.internal
         openssl pkcs12 -in /certs/truststore.p12 -out out_trust -nodes -passin pass:$${KEY_PASSPHRASE}
         openssl x509 -text -in out_trust | grep Subject:
         rm -f /certs/out_*
+        chmod 0644 /certs/*
         chown -R 1000:0 /certs && ls -laR /certs;
       '
     working_dir: /usr/share/elasticsearch
@@ -22,6 +23,8 @@ services:
       - ./certs/ca.crt:/usr/share/elasticsearch/ca.crt
       - ./certs/keystore.p12:/usr/share/elasticsearch/keystore.p12
       - ./certs/truststore.p12:/usr/share/elasticsearch/truststore.p12
+      - ./certs/aws/elastic.instance.crt:/usr/share/elasticsearch/kib01.crt
+      - ./certs/aws/elastic.instance.key:/usr/share/elasticsearch/kib01.key
       - ./passphrase:/usr/share/elasticsearch/passphrase:ro
     networks:
       - elastic
