@@ -39,7 +39,7 @@ services:
       - certs:$CERTS_DIR
       - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-      - ./logs/01:/usr/share/elasticsearch/logs:rw
+#      - ./logs/01:/usr/share/elasticsearch/logs:rw
     ports:
       - 9200:9200
     networks:
@@ -88,7 +88,7 @@ services:
       - certs:$CERTS_DIR
       - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-      - ./logs/02:/usr/share/elasticsearch/logs:rw
+#      - ./logs/02:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
 
@@ -130,7 +130,7 @@ services:
       - certs:$CERTS_DIR
       - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-      - ./logs/03:/usr/share/elasticsearch/logs:rw
+#      - ./logs/03:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
 
@@ -141,7 +141,7 @@ services:
     ports:
       - 5601:5601
     environment:
-      ELASTICSEARCH_PASSWORD: CHANGEME
+      ELASTICSEARCH_PASSWORD: 7DDLO1nO9M4F0ykKQ6DL
     volumes:
       - certs:/usr/share/kibana/config/certificates
       - ./config-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
