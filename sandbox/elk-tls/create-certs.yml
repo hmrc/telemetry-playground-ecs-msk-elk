@@ -10,23 +10,23 @@ services:
         KEY_PASSPHRASE=$$(cat ./passphrase);
         mkdir -p /certs/ca
         bin/elasticsearch-certutil ca --silent \
-                                      --pass telemetry \
+                                      --pass $${KEY_PASSPHRASE} \
                                       --out elastic-stack-ca.p12;
         bin/elasticsearch-certutil cert --silent \
                                         --pass "" \
                                         --out es-certs.zip \
                                         --ca elastic-stack-ca.p12 \
-                                        --ca-pass telemetry \
+                                        --ca-pass $${KEY_PASSPHRASE} \
                                         --in es.yml;
         bin/elasticsearch-certutil cert --silent \
                                         --out kibana-certs.zip \
                                         --ca elastic-stack-ca.p12 \
-                                        --ca-pass telemetry \
+                                        --ca-pass $${KEY_PASSPHRASE} \
                                         --pem \
                                         --in kibana.yml;
         unzip -oq es-certs.zip -d /certs;
         unzip -oq kibana-certs.zip -d /certs;
-        openssl pkcs12 -in elastic-stack-ca.p12 -passin pass:telemetry \
+        openssl pkcs12 -in elastic-stack-ca.p12 -passin pass:$${KEY_PASSPHRASE} \
                        -out /certs/ca/ca.pem -passout pass: -nokeys;
         chown -R 1000:0 /certs && ls -laR /certs;
       '
