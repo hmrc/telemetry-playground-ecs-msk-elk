@@ -6,29 +6,18 @@ server:
     enabled: true
     certificate: /usr/share/kibana/config/certificates/kib01/kib01.crt
     key: /usr/share/kibana/config/certificates/kib01/kib01.key
-#    truststore:
-#      password: telemetry
-#      path: /usr/share/kibana/config/certificates/truststore.p12
-#    keystore:
-#      password: telemetry
-#      path: /usr/share/kibana/config/certificates/keystore.p12
 
 elasticsearch:
-  hosts: [ "https://es01.telemetry.internal:9200" ]
   username: kibana
-  password: CHANGEME
   ssl:
-    certificateAuthorities: /usr/share/kibana/config/certificates/ca/ca.crt
-#    verificationMode: certificate
-#    keystore:
-#      password: telemetry
-#      path: /usr/share/kibana/config/certificates/keystore.p12
-#    truststore:
-#      password: telemetry
-#      path: /usr/share/kibana/config/certificates/truststore.p12
+    verificationMode: certificate
+    certificateAuthorities: /usr/share/kibana/config/certificates/ca/ca.pem
 
 xpack:
   monitoring:
+    elasticsearch:
+      ssl:
+        verificationMode: certificate
     ui:
       container:
         elasticsearch:

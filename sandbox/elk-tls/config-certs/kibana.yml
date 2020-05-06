@@ -1,0 +1,7 @@
+instances:
+  - name: kib01
+    dns:
+      - kib01.telemetry.internal
+      - localhost
+    ip:
+      - 127.0.0.1

@@ -6,24 +6,35 @@ services:
     container_name: create_certs
     command: >
       bash -c '
-        yum install -y -q -e 0 unzip;
-        KEY_PASSPHRASE=$$(cat ./passphrase)
+        yum install -y -q -e 0 unzip openssl;
+        KEY_PASSPHRASE=$$(cat ./passphrase);
+        mkdir -p /certs/ca
         bin/elasticsearch-certutil ca --silent \
-                                      --pass $${KEY_PASSPHRASE} \
+                                      --pass "" \
                                       --out elastic-stack-ca.p12;
         bin/elasticsearch-certutil cert --silent \
-                                        --pass $${KEY_PASSPHRASE} \
-                                        --out elastic-certificates.zip \
+                                        --pass "" \
+                                        --out es-certs.zip \
                                         --ca elastic-stack-ca.p12 \
-                                        --ca-pass $${KEY_PASSPHRASE} \
-                                        --in instances.yml;
-        unzip -o elastic-certificates.zip -d /certs;
-        chown -R 1000:0 /certs
+                                        --ca-pass "" \
+                                        --in es.yml;
+        bin/elasticsearch-certutil cert --silent \
+                                        --out kibana-certs.zip \
+                                        --ca elastic-stack-ca.p12 \
+                                        --ca-pass "" \
+                                        --pem \
+                                        --in kibana.yml;
+        unzip -oq es-certs.zip -d /certs;
+        unzip -oq kibana-certs.zip -d /certs;
+        openssl pkcs12 -in elastic-stack-ca.p12 -passin pass: \
+                       -out /certs/ca/ca.pem -passout pass: -nokeys;
+        chown -R 1000:0 /certs && ls -laR /certs;
       '
     working_dir: /usr/share/elasticsearch
     volumes:
       - certs:/certs
-      - ./config-certs/instances.yml:/usr/share/elasticsearch/instances.yml
+      - ./config-certs/es.yml:/usr/share/elasticsearch/es.yml
+      - ./config-certs/kibana.yml:/usr/share/elasticsearch/kibana.yml
       - ./passphrase:/usr/share/elasticsearch/passphrase:ro
     networks:
       - elastic
