@@ -20,9 +20,9 @@ services:
     working_dir: /usr/share/elasticsearch
     volumes:
       - certs:/certs
-      - ./gen-aws-certs/ca.telemetry.internal.crt:/usr/share/elasticsearch/ca.crt
-      - ./gen-aws-certs/keystore.p12:/usr/share/elasticsearch/keystore.p12
-      - ./gen-aws-certs/truststore.p12:/usr/share/elasticsearch/truststore.p12
+      - ./certs/aws/ca.telemetry.internal.crt:/usr/share/elasticsearch/ca.crt
+      - ./certs/aws/keystore.p12:/usr/share/elasticsearch/keystore.p12
+      - ./certs/aws/truststore.p12:/usr/share/elasticsearch/truststore.p12
       - ./passphrase:/usr/share/elasticsearch/passphrase:ro
     networks:
       - elastic

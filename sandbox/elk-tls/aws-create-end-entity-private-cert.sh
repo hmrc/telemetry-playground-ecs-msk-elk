@@ -5,7 +5,7 @@ set -x
 LAB=$(echo ${AWS_PROFILE} | sed -e 's/telemetry-internal-//g')
 CA_COMMON_NAME="internal-${LAB}.telemetry.tax.service.gov.uk"
 DOMAIN_NAME="es.telemetry.internal"
-KEY_PASSPHRASE=$(cat ../passphrase)
+KEY_PASSPHRASE=$(cat ./passphrase)
 DAYS=90
 
 CA_CERTIFICATE_ARN=$(aws acm-pca list-certificate-authorities \
@@ -14,11 +14,11 @@ CA_CERTIFICATE_ARN=$(aws acm-pca list-certificate-authorities \
 
 aws acm-pca get-certificate-authority-certificate --certificate-authority-arn ${CA_CERTIFICATE_ARN} \
                                                   --output text \
-                                                  --query 'Certificate' > ./ca.telemetry.internal.crt
+                                                  --query 'Certificate' > ./certs/aws/ca.telemetry.internal.crt
 
 aws acm-pca get-certificate-authority-certificate --certificate-authority-arn ${CA_CERTIFICATE_ARN} \
                                                   --output text \
-                                                  --query 'CertificateChain' >> ./ca.telemetry.internal.crt
+                                                  --query 'CertificateChain' >> ./certs/aws/ca.telemetry.internal.crt
 
 # Generate a private key
 openssl genrsa -out req.key 2048
@@ -27,17 +27,17 @@ openssl genrsa -out req.key 2048
 # Make note of the clientAuth AND serverAuth settings in the configuration file
 openssl req -new \
             -newkey rsa:2048 \
-            -config req.cnf \
+            -config ./config-aws/req.cnf \
             -days ${DAYS} \
-            -keyout req.pem \
-            -out req.csr \
+            -keyout ./config-aws/req.pem \
+            -out ./config-aws/req.csr \
             -passin pass:${KEY_PASSPHRASE} \
             -passout pass:${KEY_PASSPHRASE}
 
 # Post request to AWS Private CA to issue a certificate for use in our Elasticsearch cluster
 # Note the use of a custom template ARN in order to facilitate clientAuth and serverAuth
 CERTIFICATE_ARN=$(aws acm-pca issue-certificate --certificate-authority-arn ${CA_CERTIFICATE_ARN} \
-                                                --csr fileb://./req.csr \
+                                                --csr fileb://./config-aws/req.csr \
                                                 --signing-algorithm "SHA256WITHRSA" \
                                                 --template-arn "arn:aws:acm-pca:::template/EndEntityCertificate/V1" \
                                                 --validity Value=${DAYS},Type="DAYS" \
@@ -49,26 +49,26 @@ CERTIFICATE_ARN=$(aws acm-pca issue-certificate --certificate-authority-arn ${CA
 aws acm-pca get-certificate --certificate-authority-arn ${CA_CERTIFICATE_ARN} \
                             --certificate-arn ${CERTIFICATE_ARN} \
                             --output text \
-                            --query 'Certificate' > ./es.telemetry.internal.crt
+                            --query 'Certificate' > ./certs/aws/es.telemetry.internal.crt
 
 aws acm-pca get-certificate --certificate-authority-arn ${CA_CERTIFICATE_ARN} \
                             --certificate-arn ${CERTIFICATE_ARN} \
                             --output text \
-                            --query 'CertificateChain' >> ./es.telemetry.internal.crt
+                            --query 'CertificateChain' >> ./certs/aws/es.telemetry.internal.crt
 
 openssl pkcs12 -export \
-               -in ./ca.telemetry.internal.crt \
+               -in ./certs/aws/ca.telemetry.internal.crt \
                -nokeys \
-               -out ./truststore.p12 \
+               -out ./certs/aws/truststore.p12 \
                -passout pass:${KEY_PASSPHRASE}
 
 openssl pkcs12 -export \
-               -in ./es.telemetry.internal.crt \
-               -inkey ./req.pem \
+               -in ./certs/aws/es.telemetry.internal.crt \
+               -inkey ./config-aws/req.pem \
                -passin pass:${KEY_PASSPHRASE} \
-               -out ./keystore.p12 \
+               -out ./certs/aws/keystore.p12 \
                -passout pass:${KEY_PASSPHRASE}
 
-chmod 0644 ./ca.telemetry.internal.crt
-chmod 0644 ./keystore.p12
-chmod 0644 ./truststore.p12
+chmod 0644 ./certs/aws/ca.telemetry.internal.crt
+chmod 0644 ./certs/aws/keystore.p12
+chmod 0644 ./certs/aws/truststore.p12
