@@ -8,7 +8,7 @@ services:
       - node.name=es01.telemetry.internal
       - discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/keystore.p12
       - xpack.security.http.ssl.truststore.path=$CERTS_DIR/truststore.p12
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/keystore.p12
@@ -40,7 +40,7 @@ services:
       - node.name=es02.telemetry.internal
       - discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/keystore.p12
       - xpack.security.http.ssl.truststore.path=$CERTS_DIR/truststore.p12
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/keystore.p12
@@ -65,7 +65,7 @@ services:
       - node.name=es03.telemetry.internal
       - discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/keystore.p12
       - xpack.security.http.ssl.truststore.path=$CERTS_DIR/truststore.p12
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/keystore.p12
@@ -83,19 +83,19 @@ services:
     networks:
       - elastic
 
-#  kib01.telemetry.internal:
-#    image: docker.elastic.co/kibana/kibana:${VERSION}
-#    container_name: kib01
-#    depends_on: {"es01.telemetry.internal": {"condition": "service_healthy"}}
-#    ports:
-#      - 5601:5601
-#    environment:
-#      ELASTICSEARCH_PASSWORD: Fg6rQHyCARqoLs6lXCLd
-#    volumes:
-#      - certs:/usr/share/kibana/config/certificates
-#      - ./config-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-#    networks:
-#      - elastic
+  kib01.telemetry.internal:
+    image: docker.elastic.co/kibana/kibana:${VERSION}
+    container_name: kib01
+    depends_on: {"es01.telemetry.internal": {"condition": "service_healthy"}}
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_PASSWORD: Fg6rQHyCARqoLs6lXCLd
+    volumes:
+      - certs:/usr/share/kibana/config/certificates
+      - ./config-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    networks:
+      - elastic
 
 volumes:
   certs:
