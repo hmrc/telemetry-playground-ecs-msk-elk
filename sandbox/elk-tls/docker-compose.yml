@@ -4,6 +4,7 @@ services:
   es01.telemetry.internal:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
     container_name: es01
+    command: /usr/share/elasticsearch/entrypoint.sh
     environment:
       - node.name=es01.telemetry.internal
       - discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
@@ -22,7 +23,8 @@ services:
       - certs:$CERTS_DIR
       - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-#      - ./logs/01:/usr/share/elasticsearch/logs:rw
+      - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
+      - ./logs/01:/usr/share/elasticsearch/logs:rw
     ports:
       - 9200:9200
     networks:
@@ -36,6 +38,7 @@ services:
   es02.telemetry.internal:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
     container_name: es02
+    command: /usr/share/elasticsearch/entrypoint.sh
     environment:
       - node.name=es02.telemetry.internal
       - discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
@@ -54,13 +57,15 @@ services:
       - certs:$CERTS_DIR
       - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-#      - ./logs/02:/usr/share/elasticsearch/logs:rw
+      - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
+      - ./logs/02:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
 
   es03.telemetry.internal:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
     container_name: es03
+    command: /usr/share/elasticsearch/entrypoint.sh
     environment:
       - node.name=es03.telemetry.internal
       - discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
@@ -79,7 +84,8 @@ services:
       - certs:$CERTS_DIR
       - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-#      - ./logs/03:/usr/share/elasticsearch/logs:rw
+      - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
+      - ./logs/03:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
 
