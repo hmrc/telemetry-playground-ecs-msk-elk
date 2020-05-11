@@ -10,10 +10,10 @@ services:
       - discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca.crt
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/keystore.p12
-      - xpack.security.http.ssl.truststore.path=$CERTS_DIR/truststore.p12
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca.crt
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/keystore.p12
-      - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/truststore.p12
     ulimits:
       memlock:
         soft: -1
@@ -44,10 +44,10 @@ services:
       - discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca.crt
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/keystore.p12
-      - xpack.security.http.ssl.truststore.path=$CERTS_DIR/truststore.p12
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca.crt
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/keystore.p12
-      - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/truststore.p12
     ulimits:
       memlock:
         soft: -1
@@ -71,10 +71,10 @@ services:
       - discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca.crt
       - xpack.security.http.ssl.keystore.path=$CERTS_DIR/keystore.p12
-      - xpack.security.http.ssl.truststore.path=$CERTS_DIR/truststore.p12
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca.crt
       - xpack.security.transport.ssl.keystore.path=$CERTS_DIR/keystore.p12
-      - xpack.security.transport.ssl.truststore.path=$CERTS_DIR/truststore.p12
     ulimits:
       memlock:
         soft: -1

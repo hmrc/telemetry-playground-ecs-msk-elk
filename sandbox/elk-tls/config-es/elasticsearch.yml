@@ -32,8 +32,6 @@ xpack:
         keystore:
           password: telemetry
           key_password: telemetry
-        truststore:
-          password: telemetry
     transport:
       ssl:
         enabled: true
@@ -41,8 +39,6 @@ xpack:
         keystore:
           password: telemetry
           key_password: telemetry
-        truststore:
-          password: telemetry
 path:
   data: /usr/share/elasticsearch/data
   logs: /usr/share/elasticsearch/logs
