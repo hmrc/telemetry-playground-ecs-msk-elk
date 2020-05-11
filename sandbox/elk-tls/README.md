@@ -8,28 +8,46 @@ logging output to a RollingFile appender.
 ## Phase 0: Environment Variables
 
 ```bash
-export COMPOSE_PROJECT_NAME=es
+export CA_DIR=/usr/share/elasticsearch/config/certificate-authorities
 export CERTS_DIR=/usr/share/elasticsearch/config/certificates
+export COMPOSE_PROJECT_NAME=es
 export VERSION=7.6.0
+export JAVA_DEBUG_OPTS=""
+echo superSecretPasswordForPrivateKeyAndStores > ./passphrase
 ```
 
-## Phase 1: Generate certificates
+If you wish to log extra debug information then you can set the JAVA_DEBUG_OPTS as per [this article](https://www.ibm.com/support/knowledgecenter/en/SSYKE2_8.0.0/com.ibm.java.security.component.80.doc/security-component/jsse2Docs/debug.html) 
+Some examples are:
+* -Djavax.net.debug=all
+* -Djavax.net.debug=ssl
+* -Djavax.net.debug=ssl:handshake
+
+## Phase 1.0: Generate certificates
 
 ```bash
 docker-compose -f create-certs.yml run --rm create_certs
 ```
 
+## Phase 1.1: Generate keystore (assuming use of AWS private certificates)
+
+If you do not wish to generate new certs and have some AWS ACM private certificates to use then you can the following
+to generate a keystore
+
+```bash
+docker-compose -f create-keystore.yml run --rm create_keystore
+```
+
 ## Phase 2: Bring up cluster and generate passwords
 
 ```bash
-docker-compose -f docker-compose.yml up --detach
+docker-compose up -d
 
 # When the cluster is up and running, run the following to extract passwords
-docker exec es01 /bin/bash -c "bin/elasticsearch-setup-passwords auto --batch --url https://es01:9200"
+docker exec es01 /bin/bash -c "bin/elasticsearch-setup-passwords auto --batch --url https://es01.telemetry.internal:9200" > es-passwords.txt
 
 # Restart the cluster
 docker-compose stop
-docker-compose -f docker-compose.yml up --detach
+docker-compose up -d
 
 # Access Kibana using the _elastic_ username and password derived from above
 # Don't use Chrome as it complains about the certificate and never lets you continue to the site
@@ -47,7 +65,7 @@ docker-compose -f docker-compose.yml down --volumes
 ## Phase 3: Testing audit logging
 
 Once you have a cluster running into which you have authenticated, you should now see entries in your audit log. It is a
-very good idea to navigate to the sample data URL https://localhost:5601/app/kibana#/home/tutorial_directory/sampleData
+very good idea to navigate to the [sample data URL](https://localhost:5601/app/kibana#/home/tutorial_directory/sampleData)
 and load the web logs in order to have indices with which to investigate.
 
 ## Phase 4: Testing slow running searches with artificially low threshold
@@ -74,10 +92,47 @@ PUT /kibana_sample_data_logs/_settings
 }
 ```
 
+## Useful commands
+
+```bash
+# Tear down Docker to start again
+docker system prune --volumes -f
+
+# Test a p12 file can be decrypted using a password
+openssl pkcs12 -in truststore.p12 -out certificate.pem -nodes
+
+# View that certificate
+cat certificate.pem | openssl x509
+
+# Create pem from pkcs12 without private key (for CA certs)
+openssl pkcs12 -in path.p12 -out newfile.crt.pem -nokeys
+
+# How to create pkcs12 truststore using openssl
+openssl pkcs12 -export -nokeys -in certificate.cer -out pkcs12.pfx
+
+# How to view the contents of a Certificate Signing Request
+openssl req -noout -text -in req.csr
+
+# How to view the contents of a certificate
+openssl x509 -text -in ./es.telemetry.internal.crt
+```
+
 ## References
 * [Jira Ticket](https://jira.tools.tax.service.gov.uk/browse/TEL-1886)
 * [Run in Docker with TLS enabled](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-docker.html#get-started-docker-tls)
-* [TLS enabled stack source code](https://github.com/elastic/stack-docs/blob/master/docs/en/getting-started/docker/elastic-docker-tls.yml)
+* [Getting started guide](https://github.com/elastic/stack-docs/blob/master/docs/en/getting-started/get-started-docker.asciidoc)
+* [TLS enabled stack original source code](https://github.com/elastic/stack-docs/blob/master/docs/en/getting-started/docker/elastic-docker-tls.yml)
+* [Elasticsearch Encrypting Communications](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-tls.html)
+* [Elasticsearch configuring security](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-security.html)
+* [Elasticsearch configure TLS/SSL & PKI Authentication](https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-pki-authentication)
 * [Elasticsearch auditing-settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/auditing-settings.html)
-* [Elasticsearch fine tuning queries](https://www.elastic.co/blog/advanced-tuning-finding-and-fixing-slow-elasticsearch-queries)
+* [Elasticsearch security-settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html)
+* [Elasticsearch elasticsearch-certutil tool](https://www.elastic.co/guide/en/elasticsearch/reference/current/certutil.html)
+* [Elasticsearch elasticsearch-keystore tool](https://www.elastic.co/guide/en/elasticsearch/reference/current/elasticsearch-keystore.html)
 * [Elasticsearch slowlog index reference](https://www.elastic.co/guide/en/elasticsearch/reference/7.0/index-modules-slowlog.html)
+* [Elasticsearch fine tuning queries](https://www.elastic.co/blog/advanced-tuning-finding-and-fixing-slow-elasticsearch-queries)
+* [Kibana Settings](https://www.elastic.co/guide/en/kibana/current/settings.html)
+* [Kibana needs PEM files](https://discuss.elastic.co/t/why-does-elasticsearch-use-pkcs-12-while-kibana-needs-pem/161756/2)
+* [Setting up Elasticsearch and Kibana on Docker with X-Pack security enabled](http://codingfundas.com/setting-up-elasticsearch-6-8-with-kibana-and-x-pack-security-enabled/index.html)
+* [Learning to Love the Keystore](https://nicklang.com/posts/learning-to-love-the-keystore)
+* [OpenSSL Man Page](https://www.openssl.org/docs/man1.1.1/man1/openssl.html)

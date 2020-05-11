@@ -1,0 +1,29 @@
+---
+server:
+  name: kib01
+  host: kib01.telemetry.internal
+  ssl:
+    enabled: true
+    certificate: /usr/share/kibana/config/certificates/es.telemetry.internal.crt
+    key: /usr/share/kibana/config/certificates/es.telemetry.internal.key
+    keyPassphrase: telemetry
+
+elasticsearch:
+  hosts:
+    - https://es01.telemetry.internal:9200
+    - https://es02.telemetry.internal:9200
+    - https://es03.telemetry.internal:9200
+  username: kibana
+  ssl:
+    verificationMode: certificate
+    certificateAuthorities: /usr/share/kibana/config/certificates/ca.telemetry.internal.crt
+
+xpack:
+  monitoring:
+    elasticsearch:
+      ssl:
+        verificationMode: certificate
+    ui:
+      container:
+        elasticsearch:
+          enabled: true

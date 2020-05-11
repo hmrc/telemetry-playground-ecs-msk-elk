@@ -1,0 +1,11 @@
+---
+cluster:
+  name: es-docker-cluster
+network:
+  host: 0.0.0.0
+xpack:
+  security:
+    enabled: false
+path:
+  data: /usr/share/elasticsearch/data
+  logs: /usr/share/elasticsearch/logs

@@ -1,27 +1,15 @@
 version: '2.2'
 
 services:
-  es01:
+  es01.telemetry.internal:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
     container_name: es01
+    command: /usr/share/elasticsearch/entrypoint.sh
     environment:
-      - node.name=es01
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es02,es03
-      - cluster.initial_master_nodes=es01,es02,es03
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.license.self_generated.type=trial # <1>
-      - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true # <2>
-      - xpack.security.http.ssl.key=$CERTS_DIR/es01/es01.key
-      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-      - xpack.security.http.ssl.certificate=$CERTS_DIR/es01/es01.crt
-      - xpack.security.transport.ssl.enabled=true # <3>
-      - xpack.security.transport.ssl.verification_mode=certificate # <4>
-      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es01/es01.crt
-      - xpack.security.transport.ssl.key=$CERTS_DIR/es01/es01.key
+      - node.name=es01.telemetry.internal
+      - discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
+      - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
     ulimits:
       memlock:
         soft: -1
@@ -29,39 +17,29 @@ services:
     volumes:
       - data01:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
+      - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
+      - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
       - ./logs/01:/usr/share/elasticsearch/logs:rw
     ports:
       - 9200:9200
     networks:
       - elastic
     healthcheck:
-      test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      test: curl --cacert $CERTS_DIR/ca.telemetry.internal.crt -s https://es01.telemetry.internal:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
       interval: 30s
       timeout: 10s
       retries: 5
-  es02:
+
+  es02.telemetry.internal:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
     container_name: es02
+    command: /usr/share/elasticsearch/entrypoint.sh
     environment:
-      - node.name=es02
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es03
-      - cluster.initial_master_nodes=es01,es02,es03
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.license.self_generated.type=trial
-      - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=$CERTS_DIR/es02/es02.key
-      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-      - xpack.security.http.ssl.certificate=$CERTS_DIR/es02/es02.crt
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.verification_mode=certificate
-      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es02/es02.crt
-      - xpack.security.transport.ssl.key=$CERTS_DIR/es02/es02.key
+      - node.name=es02.telemetry.internal
+      - discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
+      - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
     ulimits:
       memlock:
         soft: -1
@@ -69,32 +47,22 @@ services:
     volumes:
       - data02:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
+      - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
+      - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
       - ./logs/02:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
-  es03:
+
+  es03.telemetry.internal:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
     container_name: es03
+    command: /usr/share/elasticsearch/entrypoint.sh
     environment:
-      - node.name=es03
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es02
-      - cluster.initial_master_nodes=es01,es02,es03
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.license.self_generated.type=trial
-      - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=$CERTS_DIR/es03/es03.key
-      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-      - xpack.security.http.ssl.certificate=$CERTS_DIR/es02/es02.crt
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.verification_mode=certificate
-      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
-      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es03/es03.crt
-      - xpack.security.transport.ssl.key=$CERTS_DIR/es03/es03.key
+      - node.name=es03.telemetry.internal
+      - discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
+      - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
     ulimits:
       memlock:
         soft: -1
@@ -102,39 +70,35 @@ services:
     volumes:
       - data03:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
+      - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
+      - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
       - ./logs/03:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
-  kib01:
+
+  kib01.telemetry.internal:
     image: docker.elastic.co/kibana/kibana:${VERSION}
     container_name: kib01
-    depends_on: {"es01": {"condition": "service_healthy"}}
+    depends_on: {"es01.telemetry.internal": {"condition": "service_healthy"}}
     ports:
       - 5601:5601
     environment:
-      SERVERNAME: localhost
-      ELASTICSEARCH_URL: https://es01:9200
-      ELASTICSEARCH_HOSTS: https://es01:9200
-      ELASTICSEARCH_USERNAME: kibana
       ELASTICSEARCH_PASSWORD: CHANGEME
-      ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES: $CERTS_DIR/ca/ca.crt
-      SERVER_SSL_ENABLED: "true"
-      SERVER_SSL_KEY: $CERTS_DIR/kib01/kib01.key
-      SERVER_SSL_CERTIFICATE: $CERTS_DIR/kib01/kib01.crt
     volumes:
-      - certs:$CERTS_DIR
+      - certs:/usr/share/kibana/config/certificates
+      - ./config-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     networks:
       - elastic
+
 volumes:
+  certs:
+    driver: local
   data01:
     driver: local
   data02:
     driver: local
   data03:
-    driver: local
-  certs:
     driver: local
 
 networks:

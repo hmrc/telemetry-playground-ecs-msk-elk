@@ -1,0 +1,34 @@
+version: '2.2'
+
+services:
+  import_certs:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
+    container_name: import_certs
+    command: >
+      bash -c '
+        yum install -y -q -e 0 unzip openssl;
+        KEY_PASSPHRASE=$$(cat ./passphrase);
+        cp ${CERTS_DIR}/*.crt ${CERTS_DIR}/*.p12 ${CERTS_DIR}/*.key /certs
+        openssl pkcs12 -in /certs/keystore.p12 -out out_key -nodes -passin pass:$${KEY_PASSPHRASE}
+        openssl x509 -text -in out_key | grep telemetry.internal
+        openssl pkcs12 -in /certs/truststore.p12 -out out_trust -nodes -passin pass:$${KEY_PASSPHRASE}
+        openssl x509 -text -in out_trust | grep Subject:
+        rm -f /certs/out_*
+        chmod 0644 /certs/*
+        chown -R 1000:0 /certs && ls -laR /certs;
+      '
+    working_dir: /usr/share/elasticsearch
+    volumes:
+      - certs:/certs
+      - ./certs/aws:${CERTS_DIR}
+      - ./passphrase:/usr/share/elasticsearch/passphrase:ro
+    networks:
+      - elastic
+
+volumes:
+  certs:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
