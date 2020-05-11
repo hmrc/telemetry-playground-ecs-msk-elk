@@ -7,6 +7,7 @@ lib_managed
 tmp
 *.tmp
 *.crt
+*.csr
 *.key
 *.pem
 *.p12
