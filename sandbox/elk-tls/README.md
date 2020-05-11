@@ -102,6 +102,12 @@ openssl pkcs12 -in path.p12 -out newfile.crt.pem -nokeys
 
 # How to create pkcs12 truststore using openssl
 openssl pkcs12 -export -nokeys -in certificate.cer -out pkcs12.pfx
+
+# How to view the contents of a Certificate Signing Request
+openssl req -noout -text -in req.csr
+
+# How to view the contents of a certificate
+openssl x509 -text -in ./es.telemetry.internal.crt
 ```
 
 ## References
