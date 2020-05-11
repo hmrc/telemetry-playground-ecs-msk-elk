@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 LAB=$(echo ${AWS_PROFILE} | sed -e 's/telemetry-internal-//g')
 CA_COMMON_NAME="internal-${LAB}.telemetry.tax.service.gov.uk"
 DOMAIN_NAME="es.telemetry.internal"
@@ -69,6 +67,9 @@ openssl pkcs12 -export \
                -out ./certs/aws/keystore.p12 \
                -passout pass:${KEY_PASSPHRASE}
 
+cp ./config-aws/req.pem ./certs/aws/es.telemetry.internal.key
 chmod 0644 ./certs/aws/ca.telemetry.internal.crt
+chmod 0644 ./certs/aws/es.telemetry.internal.crt
+chmod 0644 ./certs/aws/es.telemetry.internal.key
 chmod 0644 ./certs/aws/keystore.p12
 chmod 0644 ./certs/aws/truststore.p12

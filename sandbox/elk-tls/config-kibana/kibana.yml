@@ -4,8 +4,9 @@ server:
   host: kib01.telemetry.internal
   ssl:
     enabled: true
-    certificate: /usr/share/kibana/config/certificates/kib01.crt
-    key: /usr/share/kibana/config/certificates/kib01.key
+    certificate: /usr/share/kibana/config/certificates/es.telemetry.internal.crt
+    key: /usr/share/kibana/config/certificates/es.telemetry.internal.key
+    keyPassphrase: telemetry
 
 elasticsearch:
   hosts:
@@ -15,7 +16,7 @@ elasticsearch:
   username: kibana
   ssl:
     verificationMode: certificate
-    certificateAuthorities: /usr/share/kibana/config/certificates/ca.crt
+    certificateAuthorities: /usr/share/kibana/config/certificates/ca.telemetry.internal.crt
 
 xpack:
   monitoring:
