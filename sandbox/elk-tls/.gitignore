@@ -1,5 +1,4 @@
 certs/
 logs/
 config-keystore/elasticsearch.keystore
-passphrase
 es-passwords.txt

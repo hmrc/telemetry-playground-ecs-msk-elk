@@ -3,7 +3,6 @@
 LAB=$(echo ${AWS_PROFILE} | sed -e 's/telemetry-internal-//g')
 CA_COMMON_NAME="internal-${LAB}.telemetry.internal"
 DOMAIN_NAME="elasticsearch.telemetry.internal"
-KEY_PASSPHRASE=$(cat ./passphrase)
 
 CA_CERTIFICATE_ARN=$(aws acm-pca list-certificate-authorities \
   --query 'CertificateAuthorities[].[{arn:Arn,status:Status,cn:CertificateAuthorityConfiguration.Subject.CommonName}]' | \

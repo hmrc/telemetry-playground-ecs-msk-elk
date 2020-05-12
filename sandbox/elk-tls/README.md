@@ -11,9 +11,9 @@ logging output to a RollingFile appender.
 export CA_DIR=/usr/share/elasticsearch/config/certificate-authorities
 export CERTS_DIR=/usr/share/elasticsearch/config/certificates
 export COMPOSE_PROJECT_NAME=es
-export VERSION=7.6.0
 export JAVA_DEBUG_OPTS=""
-echo superSecretPasswordForPrivateKeyAndStores > ./passphrase
+export KEY_PASSPHRASE=superSecretPasswordForPrivateKeyAndStores
+export VERSION=7.6.0
 ```
 
 If you wish to log extra debug information then you can set the JAVA_DEBUG_OPTS as per [this article](https://www.ibm.com/support/knowledgecenter/en/SSYKE2_8.0.0/com.ibm.java.security.component.80.doc/security-component/jsse2Docs/debug.html) 

@@ -6,6 +6,7 @@ services:
     container_name: es01
     command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
+      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
       - node.name=es01.telemetry.internal
       - discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
@@ -37,6 +38,7 @@ services:
     container_name: es02
     command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
+      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
       - node.name=es02.telemetry.internal
       - discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
@@ -61,6 +63,7 @@ services:
     container_name: es03
     command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
+      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
       - node.name=es03.telemetry.internal
       - discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
       - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal

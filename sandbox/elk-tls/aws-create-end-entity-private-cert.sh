@@ -3,7 +3,6 @@
 LAB=$(echo ${AWS_PROFILE} | sed -e 's/telemetry-internal-//g')
 CA_COMMON_NAME="internal-${LAB}.telemetry.tax.service.gov.uk"
 DOMAIN_NAME="es.telemetry.internal"
-KEY_PASSPHRASE=$(cat ./passphrase)
 DAYS=90
 
 CA_CERTIFICATE_ARN=$(aws acm-pca list-certificate-authorities \
@@ -19,7 +18,7 @@ aws acm-pca get-certificate-authority-certificate --certificate-authority-arn ${
                                                   --query 'CertificateChain' >> ./certs/aws/ca.telemetry.internal.crt
 
 # Generate a private key
-openssl genrsa -out req.key 2048
+openssl genrsa -out ./config-aws/req.key 2048
 
 # Use the generated private key and the local config file to issue a Certificate Signing Request for the AWS Private CA
 # Make note of the clientAuth AND serverAuth settings in the configuration file
