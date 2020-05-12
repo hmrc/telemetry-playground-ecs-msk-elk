@@ -55,7 +55,7 @@ docker-compose up -d
 
 ## Phase 2.1: Tidy up
 
-If you need to bring you cluster down for a fresh start, run the following command
+If you need to bring your cluster down for a fresh start, run the following command
 
 ```bash
 docker-compose -f docker-compose.yml down --volumes
