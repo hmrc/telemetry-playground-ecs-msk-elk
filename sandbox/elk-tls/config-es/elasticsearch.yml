@@ -32,8 +32,6 @@ xpack:
         enabled: true
         keystore:
           path: /usr/share/elasticsearch/config/certificates/keystore.p12
-          password: telemetry
-          key_password: telemetry
     transport:
       ssl:
         certificate_authorities: /usr/share/elasticsearch/config/certificates/ca.telemetry.internal.crt
@@ -41,8 +39,6 @@ xpack:
         verification_mode: certificate
         keystore:
           path: /usr/share/elasticsearch/config/certificates/keystore.p12
-          password: telemetry
-          key_password: telemetry
 path:
   data: /usr/share/elasticsearch/data
   logs: /usr/share/elasticsearch/logs

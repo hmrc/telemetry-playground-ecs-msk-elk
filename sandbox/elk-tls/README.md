@@ -11,9 +11,9 @@ logging output to a RollingFile appender.
 export CA_DIR=/usr/share/elasticsearch/config/certificate-authorities
 export CERTS_DIR=/usr/share/elasticsearch/config/certificates
 export COMPOSE_PROJECT_NAME=es
-export VERSION=7.6.0
 export JAVA_DEBUG_OPTS=""
-echo superSecretPasswordForPrivateKeyAndStores > ./passphrase
+export KEY_PASSPHRASE=superSecretPasswordForPrivateKeyAndStores
+export VERSION=7.6.0
 ```
 
 If you wish to log extra debug information then you can set the JAVA_DEBUG_OPTS as per [this article](https://www.ibm.com/support/knowledgecenter/en/SSYKE2_8.0.0/com.ibm.java.security.component.80.doc/security-component/jsse2Docs/debug.html) 
@@ -28,13 +28,10 @@ Some examples are:
 docker-compose -f create-certs.yml run --rm create_certs
 ```
 
-## Phase 1.1: Generate keystore (assuming use of AWS private certificates)
-
-If you do not wish to generate new certs and have some AWS ACM private certificates to use then you can the following
-to generate a keystore
+## Phase 1.1: Import AWS certificates and configuration files into Docker volumes
 
 ```bash
-docker-compose -f create-keystore.yml run --rm create_keystore
+docker-compose -f create-volumes.yml run --rm create_volumes
 ```
 
 ## Phase 2: Bring up cluster and generate passwords
@@ -45,18 +42,20 @@ docker-compose up -d
 # When the cluster is up and running, run the following to extract passwords
 docker exec es01 /bin/bash -c "bin/elasticsearch-setup-passwords auto --batch --url https://es01.telemetry.internal:9200" > es-passwords.txt
 
+# Use the kibana password to replace the CHANGEME in the docker-compose.yml
+
 # Restart the cluster
 docker-compose stop
 docker-compose up -d
 
 # Access Kibana using the _elastic_ username and password derived from above
-# Don't use Chrome as it complains about the certificate and never lets you continue to the site
+# If you use Chrome consider running chrome://flags/#allow-insecure-localhost to allow the page to load with self-signed certs
 # https://localhost:5601
 ```
 
 ## Phase 2.1: Tidy up
 
-If you need to bring you cluster down to restart, run the following command
+If you need to bring your cluster down for a fresh start, run the following command
 
 ```bash
 docker-compose -f docker-compose.yml down --volumes

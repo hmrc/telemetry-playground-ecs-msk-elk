@@ -1,14 +1,14 @@
 version: '2.2'
 
 services:
-  import_certs:
+  create_volumes:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
-    container_name: import_certs
+    container_name: create_volumes
     command: >
       bash -c '
         yum install -y -q -e 0 unzip openssl;
-        KEY_PASSPHRASE=$$(cat ./passphrase);
         cp ${CERTS_DIR}/*.crt ${CERTS_DIR}/*.p12 ${CERTS_DIR}/*.key /certs
+        cp elasticsearch.yml entrypoint.sh kibana.yml log4j2.properties /config
         openssl pkcs12 -in /certs/keystore.p12 -out out_key -nodes -passin pass:$${KEY_PASSPHRASE}
         openssl x509 -text -in out_key | grep telemetry.internal
         openssl pkcs12 -in /certs/truststore.p12 -out out_trust -nodes -passin pass:$${KEY_PASSPHRASE}
@@ -16,17 +16,26 @@ services:
         rm -f /certs/out_*
         chmod 0644 /certs/*
         chown -R 1000:0 /certs && ls -laR /certs;
+        chown -R 1000:0 /config && ls -laR /config;
       '
+    environment:
+      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
     working_dir: /usr/share/elasticsearch
     volumes:
       - certs:/certs
+      - config:/config
       - ./certs/aws:${CERTS_DIR}
-      - ./passphrase:/usr/share/elasticsearch/passphrase:ro
+      - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/elasticsearch.yml
+      - ./config-es/entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
+      - ./config-es/log4j2.properties:/usr/share/elasticsearch/log4j2.properties
+      - ./config-kibana/kibana.yml:/usr/share/elasticsearch/kibana.yml
     networks:
       - elastic
 
 volumes:
   certs:
+    driver: local
+  config:
     driver: local
 
 networks:
