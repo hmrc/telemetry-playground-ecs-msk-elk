@@ -6,7 +6,6 @@ server:
     enabled: true
     certificate: /usr/share/kibana/config/certificates/es.telemetry.internal.crt
     key: /usr/share/kibana/config/certificates/es.telemetry.internal.key
-    keyPassphrase: telemetry
 
 elasticsearch:
   hosts:

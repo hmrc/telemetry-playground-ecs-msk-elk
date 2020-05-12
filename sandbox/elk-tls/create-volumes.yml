@@ -19,7 +19,7 @@ services:
         chown -R 1000:0 /config && ls -laR /config;
       '
     environment:
-      - ${KEY_PASSPHRASE}
+      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
     working_dir: /usr/share/elasticsearch
     volumes:
       - certs:/certs
