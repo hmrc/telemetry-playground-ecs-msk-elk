@@ -7,7 +7,6 @@ services:
     command: >
       bash -c '
         yum install -y -q -e 0 unzip openssl;
-        KEY_PASSPHRASE=$$(cat ./passphrase);
         cp ${CERTS_DIR}/*.crt ${CERTS_DIR}/*.p12 ${CERTS_DIR}/*.key /certs
         cp elasticsearch.yml entrypoint.sh kibana.yml log4j2.properties /config
         openssl pkcs12 -in /certs/keystore.p12 -out out_key -nodes -passin pass:$${KEY_PASSPHRASE}
@@ -19,6 +18,8 @@ services:
         chown -R 1000:0 /certs && ls -laR /certs;
         chown -R 1000:0 /config && ls -laR /config;
       '
+    environment:
+      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
     working_dir: /usr/share/elasticsearch
     volumes:
       - certs:/certs

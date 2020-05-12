@@ -28,13 +28,10 @@ Some examples are:
 docker-compose -f create-certs.yml run --rm create_certs
 ```
 
-## Phase 1.1: Generate keystore (assuming use of AWS private certificates)
-
-If you do not wish to generate new certs and have some AWS ACM private certificates to use then you can the following
-to generate a keystore
+## Phase 1.1: Import AWS certificates and configuration files into Docker volumes
 
 ```bash
-docker-compose -f create-keystore.yml run --rm create_keystore
+docker-compose -f create-volumes.yml run --rm create_volumes
 ```
 
 ## Phase 2: Bring up cluster and generate passwords
@@ -45,18 +42,20 @@ docker-compose up -d
 # When the cluster is up and running, run the following to extract passwords
 docker exec es01 /bin/bash -c "bin/elasticsearch-setup-passwords auto --batch --url https://es01.telemetry.internal:9200" > es-passwords.txt
 
+# Use the kibana password to replace the CHANGEME in the docker-compose.yml
+
 # Restart the cluster
 docker-compose stop
 docker-compose up -d
 
 # Access Kibana using the _elastic_ username and password derived from above
-# Don't use Chrome as it complains about the certificate and never lets you continue to the site
+# If you use Chrome consider running chrome://flags/#allow-insecure-localhost to allow the page to load with self-signed certs
 # https://localhost:5601
 ```
 
 ## Phase 2.1: Tidy up
 
-If you need to bring you cluster down to restart, run the following command
+If you need to bring you cluster down for a fresh start, run the following command
 
 ```bash
 docker-compose -f docker-compose.yml down --volumes

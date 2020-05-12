@@ -19,9 +19,6 @@ services:
       - data01:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
       - config:/usr/share/elasticsearch/config-tmp
-      - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-      - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
       - ./logs/01:/usr/share/elasticsearch/logs:rw
     ports:
       - 9200:9200
@@ -51,9 +48,6 @@ services:
       - data02:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
       - config:/usr/share/elasticsearch/config-tmp
-      - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-      - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
       - ./logs/02:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
@@ -76,9 +70,6 @@ services:
       - data03:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
       - config:/usr/share/elasticsearch/config-tmp
-      - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
-      - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
       - ./logs/03:/usr/share/elasticsearch/logs:rw
     networks:
       - elastic
