@@ -19,15 +19,15 @@ services:
         chown -R 1000:0 /config && ls -laR /config;
       '
     environment:
-      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
+      - ${KEY_PASSPHRASE}
     working_dir: /usr/share/elasticsearch
     volumes:
       - certs:/certs
       - config:/config
       - ./certs/aws:${CERTS_DIR}
-      - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/elasticsearch.yml
-      - ./config-es/entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
-      - ./config-es/log4j2.properties:/usr/share/elasticsearch/log4j2.properties
+      - ./config-es/${VERSION}/elasticsearch.yml:/usr/share/elasticsearch/elasticsearch.yml
+      - ./config-es/${VERSION}/entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
+      - ./config-es/${VERSION}/log4j2.properties:/usr/share/elasticsearch/log4j2.properties
       - ./config-kibana/kibana.yml:/usr/share/elasticsearch/kibana.yml
     networks:
       - elastic
