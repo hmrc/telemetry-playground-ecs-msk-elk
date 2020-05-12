@@ -6,11 +6,10 @@ services:
     container_name: es01
     command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
-      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
       - node.name=es01.telemetry.internal
-      - discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
-      - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
+      - ${ES_JAVA_OPTS:-/dev/null}
+      - ${KEY_PASSPHRASE:-/dev/null}
+      - ${SEED_HOSTS_ES01:-/dev/null}
     ulimits:
       memlock:
         soft: -1
@@ -35,11 +34,10 @@ services:
     container_name: es02
     command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
-      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
       - node.name=es02.telemetry.internal
-      - discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
-      - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
+      - ${ES_JAVA_OPTS:-/dev/null}
+      - ${KEY_PASSPHRASE:-/dev/null}
+      - ${SEED_HOSTS_ES02:-/dev/null}
     ulimits:
       memlock:
         soft: -1
@@ -57,11 +55,10 @@ services:
     container_name: es03
     command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
-      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
       - node.name=es03.telemetry.internal
-      - discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
-      - cluster.initial_master_nodes=es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m ${JAVA_DEBUG_OPTS}"
+      - ${ES_JAVA_OPTS:-/dev/null}
+      - ${KEY_PASSPHRASE:-/dev/null}
+      - ${SEED_HOSTS_ES03:-/dev/null}
     ulimits:
       memlock:
         soft: -1

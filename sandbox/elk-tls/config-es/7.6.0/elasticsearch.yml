@@ -1,0 +1,45 @@
+---
+bootstrap:
+  memory_lock: true
+cluster:
+  initial_master_nodes: es01.telemetry.internal,es02.telemetry.internal,es03.telemetry.internal
+  name: es-docker-cluster
+logger:
+  index:
+    indexing:
+      slowlog: "warn"
+    search:
+      slowlog: "warn"
+network:
+  host: 0.0.0.0
+xpack:
+  license:
+    self_generated:
+      type: trial
+  monitoring:
+    collection:
+      enabled: true
+  security:
+    enabled: true
+    audit:
+      enabled: true
+      logfile:
+        events:
+          emit_request_body: true
+    http:
+      ssl:
+        certificate_authorities: /usr/share/elasticsearch/config/certificates/ca.telemetry.internal.crt
+        client_authentication: optional
+        enabled: true
+        keystore:
+          path: /usr/share/elasticsearch/config/certificates/keystore.p12
+    transport:
+      ssl:
+        certificate_authorities: /usr/share/elasticsearch/config/certificates/ca.telemetry.internal.crt
+        enabled: true
+        verification_mode: certificate
+        keystore:
+          path: /usr/share/elasticsearch/config/certificates/keystore.p12
+path:
+  data: /usr/share/elasticsearch/data
+  logs: /usr/share/elasticsearch/logs

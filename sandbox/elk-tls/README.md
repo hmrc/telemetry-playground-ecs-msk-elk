@@ -11,16 +11,42 @@ logging output to a RollingFile appender.
 export CA_DIR=/usr/share/elasticsearch/config/certificate-authorities
 export CERTS_DIR=/usr/share/elasticsearch/config/certificates
 export COMPOSE_PROJECT_NAME=es
-export JAVA_DEBUG_OPTS=""
 export KEY_PASSPHRASE=superSecretPasswordForPrivateKeyAndStores
-export VERSION=7.6.0
 ```
 
-If you wish to log extra debug information then you can set the JAVA_DEBUG_OPTS as per [this article](https://www.ibm.com/support/knowledgecenter/en/SSYKE2_8.0.0/com.ibm.java.security.component.80.doc/security-component/jsse2Docs/debug.html) 
-Some examples are:
-* -Djavax.net.debug=all
-* -Djavax.net.debug=ssl
-* -Djavax.net.debug=ssl:handshake
+**WARNING**
+There should be a matching directory for the value added to VERSION. This way we can keep configuration version specific.
+
+### Version specific settings
+
+[Version 6 discovery settings](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/discovery-settings.html)
+```bash
+export VERSION=6.8.0
+export SEED_HOSTS_ES01=discovery.zen.ping.unicast.hosts=es02.telemetry.internal,es03.telemetry.internal
+export SEED_HOSTS_ES02=discovery.zen.ping.unicast.hosts=es01.telemetry.internal,es03.telemetry.internal
+export SEED_HOSTS_ES03=discovery.zen.ping.unicast.hosts=es01.telemetry.internal,es02.telemetry.internal
+```
+
+[Version 7 discovery settings](https://www.elastic.co/guide/en/elasticsearch/reference/7.6/discovery-settings.html) 
+```bash
+export VERSION=7.6.0
+export SEED_HOSTS_ES01=discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
+export SEED_HOSTS_ES02=discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
+export SEED_HOSTS_ES03=discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
+```
+
+### Java debug settings
+
+[Java 8 debug settings](https://www.ibm.com/support/knowledgecenter/en/SSYKE2_8.0.0/com.ibm.java.security.component.80.doc/security-component/jsse2Docs/debug.html)
+
+```bash
+export ES_JAVA_OPTS="ES_JAVA_OPTS=-Xms512m -Xmx512m "
+
+# If you wish to log extra debug information then you can set the ES_JAVA_OPTS as the following examples show
+# export ES_JAVA_OPTS="-Xms512m -Xmx512m -Djavax.net.debug=all"
+# export ES_JAVA_OPTS="-Xms512m -Xmx512m -Djavax.net.debug=ssl"
+# export ES_JAVA_OPTS="-Xms512m -Xmx512m -Djavax.net.debug=ssl:handshake"
+```
 
 ## Phase 1.0: Generate certificates
 
@@ -124,6 +150,7 @@ openssl x509 -text -in ./es.telemetry.internal.crt
 * [Elasticsearch Encrypting Communications](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-tls.html)
 * [Elasticsearch configuring security](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-security.html)
 * [Elasticsearch configure TLS/SSL & PKI Authentication](https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-pki-authentication)
+* [Elasticsearch configure secure ELK and Beats](https://www.elastic.co/blog/configuring-ssl-tls-and-https-to-secure-elasticsearch-kibana-beats-and-logstash)
 * [Elasticsearch auditing-settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/auditing-settings.html)
 * [Elasticsearch security-settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html)
 * [Elasticsearch elasticsearch-certutil tool](https://www.elastic.co/guide/en/elasticsearch/reference/current/certutil.html)
