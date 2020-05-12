@@ -4,7 +4,7 @@ services:
   es01.telemetry.internal:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
     container_name: es01
-    command: /usr/share/elasticsearch/entrypoint.sh
+    command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
       - node.name=es01.telemetry.internal
       - discovery.seed_hosts=es02.telemetry.internal,es03.telemetry.internal
@@ -17,6 +17,7 @@ services:
     volumes:
       - data01:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
+      - config:/usr/share/elasticsearch/config-tmp
       - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
       - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
@@ -34,7 +35,7 @@ services:
   es02.telemetry.internal:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
     container_name: es02
-    command: /usr/share/elasticsearch/entrypoint.sh
+    command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
       - node.name=es02.telemetry.internal
       - discovery.seed_hosts=es01.telemetry.internal,es03.telemetry.internal
@@ -47,6 +48,7 @@ services:
     volumes:
       - data02:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
+      - config:/usr/share/elasticsearch/config-tmp
       - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
       - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
@@ -57,7 +59,7 @@ services:
   es03.telemetry.internal:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
     container_name: es03
-    command: /usr/share/elasticsearch/entrypoint.sh
+    command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
       - node.name=es03.telemetry.internal
       - discovery.seed_hosts=es01.telemetry.internal,es02.telemetry.internal
@@ -70,6 +72,7 @@ services:
     volumes:
       - data03:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
+      - config:/usr/share/elasticsearch/config-tmp
       - ./config-es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./config-es/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties
       - ./entrypoint.sh:/usr/share/elasticsearch/entrypoint.sh
@@ -93,6 +96,8 @@ services:
 
 volumes:
   certs:
+    driver: local
+  config:
     driver: local
   data01:
     driver: local
