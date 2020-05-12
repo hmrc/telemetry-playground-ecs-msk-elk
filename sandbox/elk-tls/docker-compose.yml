@@ -6,9 +6,9 @@ services:
     container_name: es01
     command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
+      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
       - node.name=es01.telemetry.internal
       - ${ES_JAVA_OPTS:-/dev/null}
-      - ${KEY_PASSPHRASE:-/dev/null}
       - ${SEED_HOSTS_ES01:-/dev/null}
     ulimits:
       memlock:
@@ -34,9 +34,9 @@ services:
     container_name: es02
     command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
+      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
       - node.name=es02.telemetry.internal
       - ${ES_JAVA_OPTS:-/dev/null}
-      - ${KEY_PASSPHRASE:-/dev/null}
       - ${SEED_HOSTS_ES02:-/dev/null}
     ulimits:
       memlock:
@@ -55,9 +55,9 @@ services:
     container_name: es03
     command: /usr/share/elasticsearch/config-tmp/entrypoint.sh
     environment:
+      - KEY_PASSPHRASE=${KEY_PASSPHRASE}
       - node.name=es03.telemetry.internal
       - ${ES_JAVA_OPTS:-/dev/null}
-      - ${KEY_PASSPHRASE:-/dev/null}
       - ${SEED_HOSTS_ES03:-/dev/null}
     ulimits:
       memlock:
@@ -78,7 +78,8 @@ services:
     ports:
       - 5601:5601
     environment:
-      ELASTICSEARCH_PASSWORD: CHANGEME
+      ELASTICSEARCH_PASSWORD: 89VeduPWCd9D9m6i5ZAI
+      SERVER_SSL_KEYPASSPHRASE: ${KEY_PASSPHRASE}
     volumes:
       - certs:/usr/share/kibana/config/certificates
       - ./config-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
