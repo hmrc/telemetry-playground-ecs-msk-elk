@@ -1,0 +1,11 @@
+---
+apiVersion: 1
+datasources:
+  - access: 'proxy'
+    editable: false
+    isDefault: false
+    name: 'ClickHouse'
+    org_id: 1
+    type: vertamedia-clickhouse-datasource
+    url: 'http://clickhouse:8123'
+    version: 3

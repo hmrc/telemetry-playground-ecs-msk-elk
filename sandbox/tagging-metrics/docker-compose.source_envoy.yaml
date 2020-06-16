@@ -1,0 +1,30 @@
+---
+version: "3"
+services:
+  aws-ecs-envoy:
+    image: "${ENVOY_IMAGE-artefacts.tax.service.gov.uk/aws-ecs-envoy:v1.12.3.0-prod-0.21.0}"
+    container_name: "envoy"
+    ports:
+      - "6080:8080"
+      - "6901:9901"
+    volumes:
+      - "./envoy/ecs-container-metadata.json:${envoy_ECS_CONTAINER_METADATA_FILE}"
+    environment:
+      - "AWS_REGION=eu-west-2"
+      - "APPMESH_VIRTUAL_NODE_NAME=mesh/mdtp-app-mesh/virtualNode/platform-status-backend-protected"
+      - "ENABLE_ENVOY_STATSD=1"
+      - "STATSD_HOSTNAME=telegraf"
+      - "ECS_CONTAINER_METADATA_FILE=${envoy_ECS_CONTAINER_METADATA_FILE}"
+    command:
+      - bash
+      - -c
+      - |
+        STATSD_IPADDRESS=$$(python -c 'import socket; import sys; print (socket.gethostbyname(str(sys.argv[1])))' "$${STATSD_HOSTNAME}" 2> /dev/null) || /bin/true
+        [ -z "$$STATSD_IPADDRESS" ] && echo "statsd IP address could not be set via hostname $${STATSD_HOSTNAME}." && exit 2
+        echo "statsd IP address set to $${STATSD_IPADDRESS}"
+        export STATSD_IPADDRESS
+        /bin/sh -c /usr/bin/envoy-wrapper
+networks:
+  default:
+    external:
+      name: "${COMPOSE_NETWORK-tel-1287_default}"

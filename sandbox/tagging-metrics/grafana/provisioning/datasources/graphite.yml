@@ -1,0 +1,11 @@
+---
+apiVersion: 1
+datasources:
+  - access: 'proxy'
+    editable: false
+    isDefault: true
+    name: 'GraphiteWeb'
+    org_id: 1
+    type: graphite
+    url: 'http://graphite-web:8080'
+    version: 3

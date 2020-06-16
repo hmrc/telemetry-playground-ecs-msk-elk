@@ -1,0 +1,13 @@
+<yandex>
+    <graphite>
+        <host>crng_clickhouse</host>
+        <port>2003</port>
+        <timeout>60</timeout>
+        <interval>60</interval>
+        <root_path>telemetry.metrics.hmrc_data_cluster.clickhouse</root_path>
+        <hostname_in_path>true</hostname_in_path>
+        <metrics>true</metrics>
+        <events>true</events>
+        <asynchronous_metrics>true</asynchronous_metrics>
+    </graphite>
+</yandex>
