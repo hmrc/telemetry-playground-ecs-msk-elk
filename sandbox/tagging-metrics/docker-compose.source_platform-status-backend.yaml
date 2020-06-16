@@ -1,0 +1,20 @@
+## Ensure you have followed instructions in docker-compose.platform-status-backend.setup.md
+---
+version: "3"
+services:
+  platform-status-backend:
+    image: openjdk:8-jre-slim
+    container_name: "platform-status-backend"
+    volumes:
+      - "${HOME}/src/hmrc/platform-status/platform-status-backend_2.11-0.7.0/platform-status-backend-0.7.0:/app"
+    ports:
+      - "9000:9000"
+    entrypoint:
+      - bash
+      - -c
+      - |  # yamllint disable-line rule:line-length
+        /app/bin/platform-status-backend
+networks:
+  default:
+    external:
+      name: "${COMPOSE_NETWORK-tel-1287_default}"

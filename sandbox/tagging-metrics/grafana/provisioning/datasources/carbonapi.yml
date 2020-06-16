@@ -1,0 +1,11 @@
+---
+apiVersion: 1
+datasources:
+  - access: 'proxy'
+    editable: false
+    isDefault: false
+    name: 'Carbonapi'
+    org_id: 1
+    type: graphite
+    url: 'http://carbonapi:8081'
+    version: 3

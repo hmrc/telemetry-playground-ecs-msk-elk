@@ -1,0 +1,141 @@
+# yamllint disable-line rule:line-length
+
+## `make config` to see the docker-compose config of the metrics stack
+## `cat .env` to see HOST_*_PORT assignments
+---
+version: "3"
+services:
+  clickhouse:
+    container_name: "clickhouse"
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./clickhouse/rollup.xml:/etc/clickhouse-server/config.d/rollup.xml"
+      - "./clickhouse/init.sql:/docker-entrypoint-initdb.d/init.sql"
+      - "./clickhouse/graphite.xml:/etc/clickhouse-server/config.d/graphite.xml"
+      - "./clickhouse/graphite_rollup.xml:/etc/clickhouse-server/config.d/graphite_rollup.xml"
+      - "./clickhouse/query_log.xml:/etc/clickhouse-server/config.d/query_log.xml"
+      - "./data/clickhouse/data:/var/lib/clickhouse/data"
+      - "./data/clickhouse/metadata:/var/lib/clickhouse/metadata"
+    ports:
+      - "${HOST_CLICKHOUSE_HTTP_PORT}:8123"
+  carbon-clickhouse:
+    container_name: "carbon-clickhouse"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - clickhouse
+    volumes:
+      - "./carbon-clickhouse/carbon-clickhouse.conf:/etc/carbon-clickhouse/carbon-clickhouse.conf"
+      - "./data/carbon-clickhouse:/data/carbon-clickhouse"
+    ports:
+      - "${HOST_CARBON_CLICKHOUSE_TCP_PORT}:2103"
+      - "${HOST_CARBON_CLICKHOUSE_UDP_PORT}:2103/udp"
+      - "${HOST_CARBON_CLICKHOUSE_PPROF_PORT}:7007"
+  crng_graphite-relay:
+    container_name: "crng_graphite-relay"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - carbon-clickhouse
+    volumes:
+      - "./carbon-relay-ng/carbon-relay-ng.graphite-relay.conf:/conf/carbon-relay-ng.ini"
+      - "./data/crng_graphite-relay/spool:/var/spool/carbon-relay-ng"
+    ports:
+      - "${HOST_CRNG_GRAPHITE_RELAY_TCP_PORT}:2003"
+      - "${HOST_CRNG_GRAPHITE_RELAY_UDP_PORT}:2003/udp"
+      - "${HOST_CRNG_GRAPHITE_RELAY_ADMIN_PORT}:2004"
+      - "${HOST_CRNG_GRAPHITE_RELAY_HTTP_PORT}:8081"
+    networks:
+      default:
+        aliases:
+          - graphite
+  crng_clickhouse:
+    container_name: "crng_clickhouse"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - carbon-clickhouse
+    volumes:
+      - "./carbon-relay-ng/carbon-relay-ng.clickhouse.conf:/conf/carbon-relay-ng.ini"
+      - "./data/crng_clickhouse/spool:/var/spool/carbon-relay-ng"
+    ports:
+      - "${HOST_CRNG_CLICKHOUSE_TCP_PORT}:2003"
+      - "${HOST_CRNG_CLICKHOUSE_UDP_PORT}:2003/udp"
+      - "${HOST_CRNG_CLICKHOUSE_ADMIN_PORT}:2004"
+      - "${HOST_CRNG_CLICKHOUSE_HTTP_PORT}:8081"
+  telegraf:
+    container_name: "telegraf"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - crng_graphite-relay
+    volumes:
+      - "./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro"
+    ports:
+      - "${HOST_TELEGRAF_TCP_PORT}:8125"
+      - "${HOST_TELEGRAF_UDP_PORT}:8125/udp"
+    networks:
+      default:
+        aliases:
+          - statsd
+  graphite-clickhouse:
+    container_name: "graphite-clickhouse"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - clickhouse
+    links:
+      - clickhouse
+    volumes:
+      - "./graphite-clickhouse/graphite-clickhouse.conf:/etc/graphite-clickhouse/graphite-clickhouse.conf"
+      - "./graphite-clickhouse/rollup.xml:/etc/graphite-clickhouse/rollup.xml"
+    ports:
+      - "${HOST_GRAPHITE_CLICKHOUSE_TCP_PORT}:9090"
+  graphite-web:
+    container_name: "graphite-web"
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./graphite-web/graphiteweb_entrypoint.sh:/entrypoint.sh"
+      - "./graphite-web/graphiteweb.conf:/opt/graphite/webapp/graphite/local_settings.py"
+    ports:
+      - "${HOST_GRAPHITE_WEB_HTTP_PORT}:80"
+  carbonapi:
+    container_name: "carbonapi"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - graphite-clickhouse
+    volumes:
+      - "./carbonapi/carbonapi.yml:/etc/carbonapi.yml"
+      - "./carbonapi/graphTemplates.yml:/graphTemplates.yml"
+      - "./carbonapi/graphiteWeb.yml:/graphiteWeb.yml"
+    ports:
+      - "${HOST_CARBONAPI_TCP_PORT}:8081"
+  grafana:
+    container_name: "grafana"
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./grafana/provisioning/:/etc/grafana/provisioning/"
+    environment:
+      - "GF_INSTALL_PLUGINS=bessler-pictureit-panel,briangann-datatable-panel,briangann-gauge-panel,grafana-clock-panel,grafana-piechart-panel,grafana-sensu-app,michaeldmoore-annunciator-panel,snuids-trafficlights-panel,vertamedia-clickhouse-datasource"
+      - "GF_AUTH_DISABLE_LOGIN_FORM=true"
+      - "GF_AUTH_ANONYMOUS_ENABLED=true"
+      - "GF_AUTH_ANONYMOUS_ORG_ROLE=Admin"
+    ports:
+      - "${HOST_GRAFANA_HTTP_PORT}:3000"
+      - "${HOST_GRAFANA_TCP_PORT}:9200"
+  collectd:
+    container_name: "collectd"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - crng_graphite-relay
+    privileged: true
+    volumes:
+      - "./collectd/collectd.conf:/etc/collectd/collectd.conf"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      - "${HOST_COLLECTD_UDP_PORT}:25826/udp"

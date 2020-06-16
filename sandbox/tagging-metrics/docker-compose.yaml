@@ -1,0 +1,28 @@
+# yamllint disable-line rule:line-length
+
+## `make config` to see the docker-compose config of the metrics stack
+---
+version: "3"
+services:
+  clickhouse:
+    image: yandex/clickhouse-server:19.6.2.11
+  carbon-clickhouse:
+    image: lomik/carbon-clickhouse:v0.10.2
+#    image: dmiles/carbon-clickhouse:c5a1c0a
+  crng_graphite-relay:
+    image: raintank/carbon-relay-ng
+  crng_clickhouse:
+    image: raintank/carbon-relay-ng
+  telegraf:
+    image: telegraf
+  graphite-clickhouse:
+    image: lomik/graphite-clickhouse:v0.11.1
+  graphite-web:
+    image: graphiteapp/graphite-statsd:1.1.3
+    entrypoint: /entrypoint.sh
+  carbonapi:
+    image: gographite/carbonapi
+  grafana:
+    image: grafana/grafana:6.4.5
+  collectd:
+    image: evenlights/collectd

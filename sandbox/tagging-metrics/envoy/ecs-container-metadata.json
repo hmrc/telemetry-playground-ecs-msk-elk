@@ -1,0 +1,23 @@
+{
+        "Cluster": "protected-mdtp",
+        "ContainerInstanceARN": "arn:aws:ecs:eu-west-2:186795391298:container-instance/protected-mdtp/49f3336fc5b84436a604e7569b4e74bc",
+        "TaskARN": "arn:aws:ecs:eu-west-2:186795391298:task/protected-mdtp/3f0dd852fdb6461b9be9f5023ca1dba0",
+        "TaskDefinitionFamily": "ecs-platform-status-backend-protected-TaskDefinition-8F0POUR78NNS",
+        "TaskDefinitionRevision": "1",
+        "ContainerID": "4cd77897bab60057d16a0a88f68bde46d71cdf89351b46286834737a718967c5",
+        "ContainerName": "platform-status-backend",
+        "DockerContainerName": "/ecs-ecs-platform-status-backend-protected-TaskDefinition-8F0POUR78NNS-1-platform-status-backend-b2dae4e7c5e7e4f26800",
+        "ImageID": "sha256:de9414b09ba861b0473193e0cc72c1693004976e9bceac51570447672118f481",
+        "ImageName": "artefacts.tax.service.gov.uk/slugrunner:1.2.0",
+        "Networks": [
+                {
+                        "NetworkMode": "container:57fc82ca3e8bdf50749e35429a639e05eaa703ca78eb3ae0fbfa5712ab76998e",
+                        "IPv4Addresses": [
+                                ""
+                        ]
+                }
+        ],
+        "MetadataFileStatus": "READY",
+        "AvailabilityZone": "eu-west-2a",
+        "HostPrivateIPv4Address": "172.20.29.113"
+}
