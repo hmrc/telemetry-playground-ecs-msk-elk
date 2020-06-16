@@ -33,6 +33,9 @@
 |wireshark|  Wireshark the metrics stack network bridge|
 |yamllint|  YML lint docker-compose YAML|
 
+# Manual Steps
+If you want to use the targets `play-up` and `play-down` ensure you've followed the steps detailed in [docker-compose.source_platform-status-backend.setup.md](docker-compose.source_platform-status-backend.setup.md)
+
 # See also
 * [clickhouse tags](https://groups.google.com/forum/#!searchin/clickhouse/tags%7Csort:date)
 * [carbon-relay-ng tags](https://github.com/grafana/carbon-relay-ng/search?q=tag&unscoped_q=tag)
