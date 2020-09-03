@@ -8,7 +8,6 @@ services:
     image: yandex/clickhouse-server:19.6.2.11
   carbon-clickhouse:
     image: lomik/carbon-clickhouse:v0.10.2
-#    image: dmiles/carbon-clickhouse:c5a1c0a
   crng_graphite-relay:
     image: raintank/carbon-relay-ng
   crng_clickhouse:
