@@ -33,6 +33,19 @@
 |wireshark|  Wireshark the metrics stack network bridge|
 |yamllint|  YML lint docker-compose YAML|
 
+# Vanilla carbon-relay-ng metrics
+Enable vanilla `carbon-relay-ng` configuration as follows:
+
+```
+make clean stack-up -e CRNG_VARIANT=.vanilla
+```
+
+Once the stack is up you can dump the metrics via:
+
+```
+docker exec clickhouse bash -c "export HOME=/var/lib/clickhouse/ ; echo 'select Path from graphite.graphite_tree order by Path'| clickhouse client" | egrep -v -E '\.$' - > METRICS_CRNG_VARIANT_vanilla.md
+```
+
 # Manual Steps
 If you want to use the targets `play-up` and `play-down` ensure you've followed the steps detailed in [docker-compose.source_platform-status-backend.setup.md](docker-compose.source_platform-status-backend.setup.md)
 
