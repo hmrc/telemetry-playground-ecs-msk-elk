@@ -1,0 +1,37 @@
+# yamllint disable-line rule:line-length
+
+## `make config` to see the docker-compose config of the metrics stack
+## `cat .env` to see HOST_*_PORT assignments
+---
+version: "3"
+services:
+  collectd:
+    image: evenlights/collectd
+    # build: ./collectd
+    container_name: "collectd"
+    stdin_open: true
+    tty: true
+    privileged: true
+    depends_on:
+      - logstash
+    volumes:
+      - "./collectd/collectd.conf.d:/etc/collectd/collectd.conf.d"
+      - "./collectd/mdtp_scripts:/etc/collectd/mdtp_scripts"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      - "${HOST_COLLECTD_UDP_PORT}:25826/udp"
+  logstash:
+    image: jordimartin/mmock
+    command:
+      [
+        "-server-ip",
+        "0.0.0.0",
+        "-console-ip",
+        "0.0.0.0",
+        "-server-port",
+        "9600",
+      ]
+    volumes:
+      - "./logstash/mmock-config:/config"
+    ports:
+      - "${HOST_LOGSTASH_TCP_PORT}:9600/tcp"

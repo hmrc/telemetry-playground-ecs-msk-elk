@@ -11,6 +11,7 @@ tmp
 *.key
 *.pem
 *.p12
+*.pyc
 .history
 dist
 /.idea
@@ -28,3 +29,4 @@ npm-debug.log
 yarn-debug.log
 yarn-error.log
 .envrc
+/sandbox/elk-tls/log-output

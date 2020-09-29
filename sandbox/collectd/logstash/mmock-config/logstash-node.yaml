@@ -1,0 +1,58 @@
+request:
+  method: GET
+  path: /_node
+response:
+  statusCode: 200
+  headers:
+    Content-Type:
+      - "application/json"
+  body: >
+    {
+      "host" : "{{request.hostname}}",
+      "version" : "7.9.1",
+      "http_address" : "127.0.0.1:9600",
+      "id" : "3add9c38-c234-40aa-8933-842b27a2ac5d",
+      "name" : "{{request.hostname}}",
+      "ephemeral_id" : "4f816550-fcba-4ccf-a1e2-47ae1359940d",
+      "status" : "green",
+      "snapshot" : false,
+      "pipeline" : {
+        "workers" : 2,
+        "batch_size" : 512,
+        "batch_delay" : 5
+      },
+      "pipelines" : {
+        "main" : {
+          "ephemeral_id" : "8b644f9f-123d-4052-99c0-7c114273e4c9",
+          "hash" : "9b525f449c88878405b893adf18479f3d6da4296fd3bfd758f361497dd948b3b",
+          "workers" : 2,
+          "batch_size" : 512,
+          "batch_delay" : 5,
+          "config_reload_automatic" : false,
+          "config_reload_interval" : 3000000000,
+          "dead_letter_queue_enabled" : true,
+          "dead_letter_queue_path" : "/data/logstash/dead_letter_queue/main"
+        }
+      },
+      "os" : {
+        "name" : "Linux",
+        "arch" : "amd64",
+        "version" : "4.4.0-1114-aws",
+        "available_processors" : 2
+      },
+      "jvm" : {
+        "pid" : 7526,
+        "version" : "1.8.0_265",
+        "vm_version" : "1.8.0_265",
+        "vm_vendor" : "Private Build",
+        "vm_name" : "OpenJDK 64-Bit Server VM",
+        "start_time_in_millis" : 1600869903732,
+        "mem" : {
+          "heap_init_in_bytes" : 2147483648,
+          "heap_max_in_bytes" : 2130051072,
+          "non_heap_init_in_bytes" : 2555904,
+          "non_heap_max_in_bytes" : 0
+        },
+        "gc_collectors" : [ "ParNew", "ConcurrentMarkSweep" ]
+      }
+    }
