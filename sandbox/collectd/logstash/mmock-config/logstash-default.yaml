@@ -1,0 +1,27 @@
+request:
+  method: GET
+  path: /
+response:
+  statusCode: 200
+  headers:
+    Content-Type:
+      - "application/json"
+  body: >
+    {
+      "host" : "{{request.hostname}}",
+      "version" : "7.9.1",
+      "http_address" : "127.0.0.1:9600",
+      "id" : "3add9c38-c234-40aa-8933-842b27a2ac5d",
+      "name" : "{{request.hostname}}",
+      "ephemeral_id" : "4f816550-fcba-4ccf-a1e2-47ae1359940d",
+      "status" : "green",
+      "snapshot" : false,
+      "pipeline" : {
+        "workers" : 2,
+        "batch_size" : 512,
+        "batch_delay" : 5
+      },
+      "build_date" : "2020-09-01T23:34:13+00:00",
+      "build_sha" : "ffb96ff994a3669e94619451440add1514aa3391",
+      "build_snapshot" : false
+    }
