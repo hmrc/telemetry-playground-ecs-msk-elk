@@ -83,7 +83,7 @@ def read_node_stats():
         metrics = flatten_json(body)
 
         for key in metrics:
-            # log("Plugin %s %s = %s..." % (PLUGIN_NAME, key, metrics[key]))
+            log("Plugin %s %s = %s..." % (PLUGIN_NAME, key, metrics[key]))
 
             collectd.Values(plugin=PLUGIN_NAME,
                             type_instance=key,
