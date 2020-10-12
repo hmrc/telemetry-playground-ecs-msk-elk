@@ -1,0 +1,3 @@
+[submodule "sandbox/collectd/collectd/telemetry-pkgs"]
+	path = sandbox/collectd/collectd/telemetry-pkgs
+	url = git@github.com:hmrc/telemetry-pkgs.git

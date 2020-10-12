@@ -1,4 +1,4 @@
-export COMPOSE_PROJECT_NAME=tel-1287
+export COMPOSE_PROJECT_NAME=collectd_logstash
 export COMPOSE_NETWORK=$(COMPOSE_PROJECT_NAME)_default
 export ARTIFACTORY_FQDN ?= artefacts.tax.service.gov.uk
 
