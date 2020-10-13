@@ -1,7 +1,5 @@
 FROM evenlights/collectd
-RUN python --version
-RUN pip --version
-RUN ls -la
+RUN apt-get update && apt-get install -y collectd-utils
 RUN mkdir /src
 COPY telemetry-pkgs/collectd_logstash /src/collectd_logstash
 RUN ls -la /src
