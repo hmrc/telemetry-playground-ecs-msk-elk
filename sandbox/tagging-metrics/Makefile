@@ -1,7 +1,7 @@
 export COMPOSE_PROJECT_NAME=tel-1287
 export COMPOSE_NETWORK=$(COMPOSE_PROJECT_NAME)_default
 export ARTIFACTORY_FQDN ?= artefacts.tax.service.gov.uk
-export CRNG_VARIANT := $(or $(CRNG_VARIANT),) # set to '.vanilla' to override default
+export CRNG_VARIANT=# set to '.vanilla' to override default
 
 .PHONY: default
 default: help
