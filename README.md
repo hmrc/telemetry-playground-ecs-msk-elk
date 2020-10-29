@@ -1,5 +1,11 @@
 # playground-ecs-msk-elk
 
+## Requirements 
+
+```
+git submodule update --init
+```
+
 Play with the AWS MSK service. Produce and consume a topic via logstash and ingest to Elasticsearch.
 
 The following services and associated ECS tasks are deployed:

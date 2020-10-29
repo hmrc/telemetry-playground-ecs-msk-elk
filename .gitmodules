@@ -1,3 +1,12 @@
 [submodule "sandbox/collectd/collectd/telemetry-pkgs"]
 	path = sandbox/collectd/collectd/telemetry-pkgs
 	url = git@github.com:hmrc/telemetry-pkgs.git
+[submodule "sandbox/clickhouse/clickhouse-cluster"]
+	path = sandbox/clickhouse/clickhouse-cluster
+	url = git@github.com:craigedmunds/clickhouse-cluster.git
+[submodule "sandbox/clickhouse/aws-ami-telemetry-clickhouse"]
+	path = sandbox/clickhouse/aws-ami-telemetry-clickhouse
+	url = git@github.com:hmrc/aws-ami-telemetry-clickhouse.git
+[submodule "sandbox/clickhouse/telemetry-terraform"]
+	path = sandbox/clickhouse/telemetry-terraform
+	url = git@github.com:hmrc/telemetry-terraform.git
