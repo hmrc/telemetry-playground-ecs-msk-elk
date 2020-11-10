@@ -8,7 +8,7 @@ services:
     volumes:
       - "${HOME}/src/hmrc/platform-status/platform-status-backend_2.11-0.7.0/platform-status-backend-0.7.0:/app"
     ports:
-      - "9000:9000"
+      - "9001:9000"
     entrypoint:
       - bash
       - -c
