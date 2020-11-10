@@ -1,0 +1,117 @@
+version: '2'
+services:
+
+  zookeeper:
+    environment:
+      - ZOO_4LW_COMMANDS_WHITELIST=*
+
+  ch1:
+    build:
+      args:
+        - BASE_IMAGE=jrei/systemd-ubuntu:18.04
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ../aws-ami-telemetry-clickhouse/files:/var/lib/clickhouse-ami
+      - ../telemetry-terraform/modules/clickhouse-shard:/var/lib/tt-clickhouse-shard
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/systemd/clickhouse-server.service:/etc/systemd/system/clickhouse-server.service
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/sbin/clickhouse-bootstrap.py:/usr/local/sbin/clickhouse-bootstrap.py
+      - ../clickhouse-docker.py:/usr/local/sbin/clickhouse-docker.py
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/sbin/clickhouse-bootstrap.sh:/usr/local/sbin/clickhouse-bootstrap.sh
+    command: ["/lib/systemd/systemd"]
+    environment:
+      - BOOTSTRAP_SCRIPT_LOGLEVEL=DEBUG
+      - PATH=/usr/local/sbin:$PATH
+      - AWS_AVAILABILITY_ZONE=eu-west-2a
+      - AWS_TAG_SHARD_NAME=shard_1
+
+  ch2:
+    build:
+      args:
+        - BASE_IMAGE=jrei/systemd-ubuntu:18.04
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ../aws-ami-telemetry-clickhouse/files:/var/lib/clickhouse-ami
+      - ../telemetry-terraform/modules/clickhouse-shard:/var/lib/tt-clickhouse-shard
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/systemd/clickhouse-server.service:/etc/systemd/system/clickhouse-server.service
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/sbin/clickhouse-bootstrap.py:/usr/local/sbin/clickhouse-bootstrap.py
+      - ../clickhouse-docker.py:/usr/local/sbin/clickhouse-docker.py
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/sbin/clickhouse-bootstrap.sh:/usr/local/sbin/clickhouse-bootstrap.sh
+    command: ["/lib/systemd/systemd"]
+    environment:
+      - BOOTSTRAP_SCRIPT_LOGLEVEL=DEBUG
+      - PATH=/usr/local/sbin:$PATH
+      - AWS_AVAILABILITY_ZONE=eu-west-2b
+      - AWS_TAG_SHARD_NAME=shard_1
+  ch3:
+    build:
+      args:
+        - BASE_IMAGE=jrei/systemd-ubuntu:18.04
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ../aws-ami-telemetry-clickhouse/files:/var/lib/clickhouse-ami
+      - ../telemetry-terraform/modules/clickhouse-shard:/var/lib/tt-clickhouse-shard
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/systemd/clickhouse-server.service:/etc/systemd/system/clickhouse-server.service
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/sbin/clickhouse-bootstrap.py:/usr/local/sbin/clickhouse-bootstrap.py
+      - ../clickhouse-docker.py:/usr/local/sbin/clickhouse-docker.py
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/sbin/clickhouse-bootstrap.sh:/usr/local/sbin/clickhouse-bootstrap.sh
+    command: ["/lib/systemd/systemd"]
+    environment:
+      - BOOTSTRAP_SCRIPT_LOGLEVEL=DEBUG
+      - PATH=/usr/local/sbin:$PATH
+      - AWS_AVAILABILITY_ZONE=eu-west-2a
+      - AWS_TAG_SHARD_NAME=shard_2
+  ch4:
+    build:
+      args:
+        - BASE_IMAGE=jrei/systemd-ubuntu:18.04
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ../aws-ami-telemetry-clickhouse/files:/var/lib/clickhouse-ami
+      - ../telemetry-terraform/modules/clickhouse-shard:/var/lib/tt-clickhouse-shard
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/systemd/clickhouse-server.service:/etc/systemd/system/clickhouse-server.service
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/sbin/clickhouse-bootstrap.py:/usr/local/sbin/clickhouse-bootstrap.py
+      - ../clickhouse-docker.py:/usr/local/sbin/clickhouse-docker.py
+      - ../aws-ami-telemetry-clickhouse/files/clickhouse-server/sbin/clickhouse-bootstrap.sh:/usr/local/sbin/clickhouse-bootstrap.sh
+    command: ["/lib/systemd/systemd"]
+    environment:
+      - BOOTSTRAP_SCRIPT_LOGLEVEL=DEBUG
+      - PATH=/usr/local/sbin:$PATH
+      - AWS_AVAILABILITY_ZONE=eu-west-2b
+      - AWS_TAG_SHARD_NAME=shard_2
+  zoonavigator:
+    image: elkozmon/zoonavigator
+    ports:
+      - 9000:9000
+    depends_on:
+      - zookeeper
+    environment:
+      - HTTP_PORT=9000
+      - CONNECTION_LOCALZK_NAME=docker
+      - CONNECTION_LOCALZK_CONN=zookeeper:2181
+      - AUTO_CONNECT_CONNECTION_ID=LOCALZK
+
+  # Useful tools:
+  # nc:
+  #   image: subfuzion/netcat
+  #   depends_on:
+  #     - zookeeper
+  # zookeepercli:
+  #   image: atzoum/zookeepercli
+  #   depends_on:
+  #     - zookeeper
