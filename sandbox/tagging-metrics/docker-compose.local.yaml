@@ -20,6 +20,7 @@ services:
       - "./data/clickhouse/metadata:/var/lib/clickhouse/metadata"
     ports:
       - "${HOST_CLICKHOUSE_HTTP_PORT}:8123"
+      - "${HOST_CLICKHOUSE_TCP_PORT}:9000"
   carbon-clickhouse:
     container_name: "carbon-clickhouse"
     stdin_open: true
